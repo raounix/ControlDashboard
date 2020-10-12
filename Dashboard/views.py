@@ -11,7 +11,7 @@ def Index(request):
 
 
 def MonitoringService(request):
-    stat = subprocess.check_call('service --status-all >/dev/null')
+    
     
     return render (request,"Dashboard_Templates/ServiceMonitoring.html",{'alldata':[{'name':'Nginx','status':'Up','uptime':'75'},{'name':'Apache','status':'Down','uptime':'50'}]})
 
