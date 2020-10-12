@@ -1,0 +1,139 @@
+{% extends 'Dashboard_Templates/dash_base.html' %}  {% load static %}
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+
+
+            {% block content %}
+            
+            
+            
+            <div class="main-content">
+
+
+                <div class="page-content">
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between">
+                                    <h4 class="mb-0">Cart</h4>
+
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Ecommerce</a></li>
+                                            <li class="breadcrumb-item active">Cart</li>
+                                        </ol>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-centered mb-0 table-nowrap">
+                                                <thead class="bg-light">
+                                                    <tr>
+                                           
+                                                        <th>Service Name</th>
+                                                        <th>Status</th>
+                                                      
+                                                        <th>Uptime</th>
+                                                        <th class="text-center">Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                {% for data in alldata %}
+                                                    <tr>
+                                                        {% comment %} <td>
+                                                            <img src="{% static  'images/product/img-1.png' %}" alt="product-img"
+                                                                title="product-img" class="avatar-md" />
+                                                        </td> {% endcomment %}
+                                                        <td>
+                                                            <h5 class="font-size-14 text-truncate"><a  class="text-dark">{{data.name}}</a></h5>
+                                                            {% comment %} <p class="mb-0">Color : <span class="font-weight-medium">Blue</span></p> {% endcomment %}
+                                                        </td>
+                                                        {% if data.status == "Up" %}
+                                                        <td class="text-success"> 
+                                                            {{data.status}}
+                                                        </td>
+                                                        
+                                                        {% else %}
+                                                         <td class="text-danger" > 
+                                                            {{data.status}}
+                                                        </td>
+                                                        {% endif  %}
+                                                        
+                                                        <td >
+                                                            {{data.uptime}}
+                                                        </td>
+                                                        <td style="width: 90px;" class="text-center">
+                                                            <a href="javascript:void(0);" class="action-icon text-success"> <i class="mdi mdi-play-box font-size-18"></i></a>
+                                                             <a href="javascript:void(0);" class="action-icon text-danger"> <i class="mdi mdi-stop-circle font-size-18"></i></a>
+                                                            
+                                                        </td>
+                                                    </tr>
+                                                    {% endfor %}
+                                      
+                                                    {% comment %} <tr class="bg-light text-right">
+                                                        
+                                                        <th scope="row" colspan="5">
+                                                            Sub Total :
+                                                        </th>
+                                                        
+                                                        <td>
+                                                            $ 1530
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="bg-light text-right">
+                                                        
+                                                        <th scope="row" colspan="5">
+                                                            Discount :
+                                                        </th>
+                                                        
+                                                        <td>
+                                                            - $ 30
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="bg-light text-right">
+                                                        
+                                                        <th scope="row" colspan="5">
+                                                            Shipping Charge :
+                                                        </th>
+                                                        
+                                                        <td>
+                                                            $ 25
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="bg-light text-right">
+                                                        
+                                                        <th scope="row" colspan="5">
+                                                            Total :
+                                                        </th>
+                                                        
+                                                        <td>
+                                                            $ 1525
+                                                        </td>
+                                                    </tr> {% endcomment %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end row -->
+
+                    </div> <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+
+                
+        
+{% endblock %}
