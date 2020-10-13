@@ -18,12 +18,12 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="page-title-box d-flex align-items-center justify-content-between">
-                                    <h4 class="mb-0">Cart</h4>
+                                    <h4 class="mb-0">Services</h4>
 
                                     <div class="page-title-right">
                                         <ol class="breadcrumb m-0">
-                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Ecommerce</a></li>
-                                            <li class="breadcrumb-item active">Cart</li>
+                                      
+                                            <li class="breadcrumb-item active">Service List</li>
                                         </ol>
                                     </div>
 
@@ -44,41 +44,43 @@
                                                         <th>Service Name</th>
                                                         <th>Status</th>
                                                       
-                                                        <th>Uptime</th>
+                                                     
                                                         <th class="text-center">Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                 {% for data in alldata %}
+                                                    {% for key,value in data.items %}
                                                     <tr>
+                                                    
+
                                                         {% comment %} <td>
                                                             <img src="{% static  'images/product/img-1.png' %}" alt="product-img"
                                                                 title="product-img" class="avatar-md" />
                                                         </td> {% endcomment %}
                                                         <td>
-                                                            <h5 class="font-size-14 text-truncate"><a  class="text-dark">{{data.name}}</a></h5>
+                                                            <h5 class="font-size-14 text-truncate"><a  class="text-dark">{{key}}</a></h5>
                                                             {% comment %} <p class="mb-0">Color : <span class="font-weight-medium">Blue</span></p> {% endcomment %}
                                                         </td>
-                                                        {% if data.status == "Up" %}
+                                                        {% if value == "Up" %}
                                                         <td class="text-success"> 
-                                                            {{data.status}}
+                                                            {{value}}
                                                         </td>
                                                         
                                                         {% else %}
                                                          <td class="text-danger" > 
-                                                            {{data.status}}
+                                                            {{value}}
                                                         </td>
                                                         {% endif  %}
                                                         
-                                                        <td >
-                                                            {{data.uptime}}
-                                                        </td>
+                                                     
                                                         <td style="width: 90px;" class="text-center">
                                                             <a href="javascript:void(0);" class="action-icon text-success"> <i class="mdi mdi-play-box font-size-18"></i></a>
                                                              <a href="javascript:void(0);" class="action-icon text-danger"> <i class="mdi mdi-stop-circle font-size-18"></i></a>
                                                             
                                                         </td>
                                                     </tr>
+                                                        {% endfor %}
                                                     {% endfor %}
                                       
                                                     {% comment %} <tr class="bg-light text-right">

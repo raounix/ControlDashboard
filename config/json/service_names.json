@@ -1,0 +1,10 @@
+{
+    "service": [{
+            "name": "nordvpn.service"
+        },
+        {
+            "name": "nginx.service"
+        }
+
+    ]
+}
