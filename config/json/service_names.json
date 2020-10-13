@@ -4,6 +4,9 @@
         },
         {
             "name": "nginx.service"
+        },
+        {
+        "name": "openvpn.service"
         }
 
     ]

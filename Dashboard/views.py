@@ -1,5 +1,6 @@
 from django.shortcuts import render
 import os,subprocess,sys,subprocess
+from django.http import HttpResponse
 # Create your views here.
 import json
 
@@ -42,6 +43,9 @@ def MonitoringService(request):
 
 
 
-
-def error_404(request,exception):
-    return render(request, 'Dashboard_Templates/pages-404.html', status=404)
+def testcall(request):
+    service=str(request.POST['data'])
+    service=service.replace(".service","")
+    # subprocess.Popen(["service", service, "stop" , "> /dev/null"],stdout=subprocess.PIPE).communicate()
+    os.system("service "+service+" stop")
+    return HttpResponse(request.POST['data'])

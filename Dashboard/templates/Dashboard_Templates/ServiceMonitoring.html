@@ -75,8 +75,8 @@
                                                         
                                                      
                                                         <td style="width: 90px;" class="text-center">
-                                                            <a href="javascript:void(0);" class="action-icon text-success"> <i class="mdi mdi-play-box font-size-18"></i></a>
-                                                             <a href="javascript:void(0);" class="action-icon text-danger"> <i class="mdi mdi-stop-circle font-size-18"></i></a>
+                                                            <a onclick="StartService('{{ key }}')" class="action-icon text-success"> <i class="mdi mdi-play-box font-size-18"></i></a>
+                                                             <a onclick="test()" class="action-icon text-danger"> <i class="mdi mdi-stop-circle font-size-18"></i></a>
                                                             
                                                         </td>
                                                     </tr>
@@ -137,5 +137,21 @@
                 <!-- End Page-content -->
 
                 
-        
+ 
+{% endblock %}
+            {% block script %}
+<script>
+function StartService(key){
+    var text = "test successful";
+
+    $.ajax({
+   type: "POST",
+   url: '{{ 'my-ajax-test/' }}',
+   data: { csrfmiddlewaretoken: '{{ csrf_token }}', data: key },
+   success: function callback(response){
+               console.log(response);
+            }
+});
+}
+</script>
 {% endblock %}
