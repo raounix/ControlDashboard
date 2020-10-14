@@ -1,7 +1,10 @@
 from django.shortcuts import render
 import os,subprocess,sys,subprocess
 from django.http import HttpResponse
+from .models import SoftSwitch,Service
+from django.core import serializers
 # Create your views here.
+import json
 import json
 
 import ast
@@ -17,8 +20,27 @@ def MainDashboardPage(request):
 
 
 
-def MonitoringService(request):
-   pass
+def MonitoringService(request,slug):
+    if(slug=="ssw"):
+       main=Service.objects.filter(Type="ssw")
+       
+    #    print(main.service_id)
+    #    b=SoftSwitch(service_id=main)
+    #    b.save()
+       return render(request,"Dashboard_Templates/ServiceMonitoring.html",{"alldata":main})
+    elif(slug=="sbc"):
+        main=Service.objects.filter(Type="sbc")
+       
+    #    print(main.service_id)
+    #    b=SoftSwitch(service_id=main)
+    #    b.save()
+        return render(request,"Dashboard_Templates/ServiceMonitoring.html",{"alldata":main})
+
+
+
+
+
+
 
 
 
