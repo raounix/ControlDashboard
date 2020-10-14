@@ -30,8 +30,34 @@
                                 </div>
                             </div>
                         </div>
+                        
+                        <div class="row">
+                        <div class="col-lg-5">
                         <!-- end page title -->
-
+                        <div class="form-group mb-4">
+                                                            <label for="input-ip">Name</label>
+                                                            <input id="input-name" class="form-control input-mask" data-inputmask="'alias': 'ip'">
+                                                            
+    
+                        </div>
+                        </div>
+                         <div class="col-lg-5">
+                        <!-- end page title -->
+                        <div class="form-group mb-4">
+                                                            <label for="input-ip">IP address</label>
+                                                            <input id="input-ip" class="form-control input-mask" data-inputmask="'alias': 'ip'">
+                                                            <span class="text-muted">e.g "99.99.99.99"</span>
+    
+                        </div>
+                        </div>
+                         <div class="col-lg-2">
+                        <!-- end page title -->
+                        <div class="form-group mb-4 mt-4">
+                            <button onclick="AddService('{{type}}')" type="button" class="btn btn-success waves-effect waves-light">Success</button>
+    
+                        </div>
+                        </div>
+                        </div>
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="card">
@@ -145,6 +171,24 @@
 {% endblock %}
             {% block script %}
 <script>
+
+
+function AddService(service_type){
+   var name=$("#input-name").val();
+   var ip=$("#input-ip").val();
+   
+    $.ajax({
+   type: "POST",
+   url: '{{ 'add-service/' }}',
+   data: { csrfmiddlewaretoken: '{{ csrf_token }}', "type": service_type ,"name":name,"ip":ip},
+   success: function callback(result){
+               console.log(result);
+            }
+});
+
+   
+}
+
 function StartService(key){
    
 

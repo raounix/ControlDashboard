@@ -1,13 +1,15 @@
-from django.shortcuts import render
-import os,subprocess,sys,subprocess
-from django.http import HttpResponse
-from .models import SoftSwitch,Service
-from django.core import serializers
+import ast
 # Create your views here.
 import json
-import json
+import os
+import subprocess
+import sys
 
-import ast
+from django.core import serializers
+from django.http import HttpResponse
+from django.shortcuts import render
+
+from .models import Service, SoftSwitch
 
 
 def MainDashboardPage(request):
@@ -27,7 +29,7 @@ def MonitoringService(request,slug):
     #    print(main.service_id)
     #    b=SoftSwitch(service_id=main)
     #    b.save()
-       return render(request,"Dashboard_Templates/ServiceMonitoring.html",{"alldata":main})
+       return render(request,"Dashboard_Templates/ServiceMonitoring.html",{"alldata":main,"type":"ssw"})
     elif(slug=="sbc"):
         main=Service.objects.filter(Type="sbc")
        
@@ -40,7 +42,18 @@ def MonitoringService(request,slug):
 
 
 
+def AddService(request):
+    if(request.POST['type']=="ssw"):
+        Type=str(request.POST['type'])
+        name=str(request.POST['name'])
+        ip=str(request.POST['ip'])
+        service_object=Service(name=name,Type=Type,ip=ip)
+        service_object.save()
+        ssw_object=SoftSwitch(service_id=service_object)
+        ssw_object.save()
+        return HttpResponse("success")
 
+  
 
 
 

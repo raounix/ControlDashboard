@@ -25,7 +25,8 @@
         <!-- Icons Css -->
         <link href="{% static 'css/icons.min.css' %}" rel="stylesheet" type="text/css" />
         <!-- App Css-->
-        <link href="{% static 'css/app.min.css' %}" id="app-style" rel="stylesheet" type="text/css" />
+        {% comment %} <link href="{% static 'css/app.min.css' %}" id="app-style" rel="stylesheet" type="text/css" /> {% endcomment %}
+                <link href="static/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
 
     </head>
 
@@ -448,7 +449,7 @@
                                 {% for service_type in service %}
                            
                             <li>
-                                <a href="{{service_type.name}}" class=" waves-effect">
+                                <a href="{{service_type.name}}" class="waves-effect">
                                     <i class="ri-radar-line"></i>
                                     <span>{{service_type.name}}</span>
                                 </a>
@@ -751,7 +752,7 @@
         <script src="{% static 'libs/node-waves/waves.min.js' %}"></script>
 
         <!-- apexcharts -->
-         <script src="{% static 'libs/apexcharts/apexcharts.min.js' %}"></script>
+         {% comment %} <script src="{% static 'libs/apexcharts/apexcharts.min.js' %}"></script> {% endcomment %}
 
         <!-- jquery.vectormap map -->
         <script src="{% static 'libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.min.js' %}"></script>
@@ -765,7 +766,7 @@
         <script src="{% static 'libs/datatables.net-responsive/js/dataTables.responsive.min.js' %}"></script>
         <script src="{% static 'libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js' %}"></script>
 
-        <script src="{% static 'js/pages/dashboard.init.js' %}"></script>
+        {% comment %} <script src="{% static 'js/pages/dashboard.init.js' %}"></script> {% endcomment %}
 
             </body>
 
