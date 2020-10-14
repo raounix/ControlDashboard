@@ -7,45 +7,29 @@ import json
 import ast
 
 
-def Index(request):
-    return render(request,"Dashboard_Templates/index.html")
+def MainDashboardPage(request):
+    input_file = open ('config/json/service_names.json')
+    json_array = json.load(input_file)
+    input_file.close()
+
+    return render(request,"Dashboard_Templates/index.html",json_array)
 
 
 
 
 def MonitoringService(request):
-    input_file = open ('config/json/service_names.json')
-    json_array = json.load(input_file)
-
-    elements={}
-    json_builder={"alldata": []}
-
-    
-    for service_name in json_array["service"]:
-        
-        
-        
-        State=str(subprocess.Popen(["systemctl", "show", "-p", "SubState", "--value", service_name["name"]],stdout=subprocess.PIPE).communicate())
-        
-    
-        if "running" in State or "exited" in State:
-            elements[service_name["name"]]="Up"
-        else:
-            elements[service_name["name"]]="Down"
-        
-        
-
-
-    json_builder["alldata"].append((elements))
-
-    
-    return render (request,"Dashboard_Templates/ServiceMonitoring.html",json_builder)
+   pass
 
 
 
-def testcall(request):
+def StartService(request):
     service=str(request.POST['data'])
     service=service.replace(".service","")
-    # subprocess.Popen(["service", service, "stop" , "> /dev/null"],stdout=subprocess.PIPE).communicate()
+    os.system("service "+service+" start")
+    # return HttpResponse(request.POST['Success'])
+
+def StopService(request):
+    service=str(request.POST['data'])
+    service=service.replace(".service","")
     os.system("service "+service+" stop")
-    return HttpResponse(request.POST['data'])
+    # return HttpResponse(request.POST['data'])

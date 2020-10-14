@@ -445,14 +445,15 @@
                                     <span>Dashboard</span>
                                 </a>
                             </li>
-
+                                {% for service_type in service %}
+                           
                             <li>
-                                <a href="monitoring_service" class=" waves-effect">
+                                <a href="{{service_type.name}}" class=" waves-effect">
                                     <i class="ri-radar-line"></i>
-                                    <span>Service Monitoring</span>
+                                    <span>{{service_type.name}}</span>
                                 </a>
                             </li>
-
+                                {% endfor %}
                             {% comment %} <li>
                                 <a href="apps-chat.html" class=" waves-effect">
                                     <i class="ri-chat-1-line"></i>

@@ -49,7 +49,10 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
+                                                <div id="Status-Table">
+
                                                 {% for data in alldata %}
+                                                {{data}}
                                                     {% for key,value in data.items %}
                                                     <tr>
                                                     
@@ -76,7 +79,7 @@
                                                      
                                                         <td style="width: 90px;" class="text-center">
                                                             <a onclick="StartService('{{ key }}')" class="action-icon text-success"> <i class="mdi mdi-play-box font-size-18"></i></a>
-                                                             <a onclick="test()" class="action-icon text-danger"> <i class="mdi mdi-stop-circle font-size-18"></i></a>
+                                                             <a onclick="StopService('{{key}}')" class="action-icon text-danger"> <i class="mdi mdi-stop-circle font-size-18"></i></a>
                                                             
                                                         </td>
                                                     </tr>
@@ -123,6 +126,7 @@
                                                             $ 1525
                                                         </td>
                                                     </tr> {% endcomment %}
+                                                    </div>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -142,14 +146,27 @@
             {% block script %}
 <script>
 function StartService(key){
-    var text = "test successful";
+   
 
     $.ajax({
    type: "POST",
-   url: '{{ 'my-ajax-test/' }}',
+   url: '{{ 'start-service/' }}',
    data: { csrfmiddlewaretoken: '{{ csrf_token }}', data: key },
-   success: function callback(response){
-               console.log(response);
+   success: function callback(){
+               console.log("Start");
+            }
+});
+}
+
+
+function StopService(key){
+  $.ajax({
+   type: "POST",
+   url: '{{ 'stop-service/' }}',
+   data: { csrfmiddlewaretoken: '{{ csrf_token }}', data: key },
+   success: function callback(){
+               console.log("stop")
+               
             }
 });
 }

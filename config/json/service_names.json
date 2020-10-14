@@ -1,13 +1,11 @@
 {
     "service": [{
-            "name": "nordvpn.service"
+            "name": "ssw"
         },
         {
-            "name": "nginx.service"
-        },
-        {
-        "name": "openvpn.service"
+            "name": "sbc"
         }
+      
 
     ]
 }
