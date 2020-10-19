@@ -1,0 +1,251 @@
+{% extends 'Dashboard_Templates/dash_base.html' %} {% load static %}
+
+
+
+ {% block content %}
+ <input type="hidden" id="hid_id" value="" />
+ <input type="hidden" id="hid_name" value="" />
+<input type="hidden" id="hid_ip" value="" />
+
+
+ <div id="modals">
+ 	<div class="modal fade" id="edit-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+								<div class="modal-dialog modal-dialog-centered">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h4 class="modal-title" id="myLargeModalLabel">Edit</h4>
+											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+										</div>
+										</br>
+										<div class="input-group custom">
+													<input id="new_name" type="text" class="form-control form-control-lg" placeholder="Service Name">
+													<div class="input-group-append custom">
+														<span class="input-group-text"><i class="icon-copy dw dw-name"></i></span>
+													</div>
+										</div>
+										<div class="input-group custom">
+													<input id="new_ip" type="text" class="form-control form-control-lg" placeholder="IP">
+													<div class="input-group-append custom">
+														<span class="input-group-text"><i class="icon-copy dw dw-computer"></i></span>
+													</div>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+											<button type="button" class="btn btn-primary" onclick="Submit_Edit()">Save changes</button>
+										</div>
+										
+									</div>
+								</div>
+							</div>
+</div>
+
+
+
+		<div class="pd-ltr-20 xs-pd-20-10">
+			<div class="min-height-200px">
+				<div class="page-header">
+					<div class="row">
+						<div class="col-md-6 col-sm-12">
+							<div class="title">
+								<h4>DataTable</h4>
+							</div>
+							<nav aria-label="breadcrumb" role="navigation">
+								<ol class="breadcrumb">
+									<li class="breadcrumb-item"><a href="index.html">Home</a></li>
+									<li class="breadcrumb-item active" aria-current="page">DataTable</li>
+								</ol>
+							</nav>
+						</div>
+						<div class="col-md-6 col-sm-12 text-right">
+							<div class="dropdown">
+								<a class="btn btn-primary dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+									January 2018
+								</a>
+								<div class="dropdown-menu dropdown-menu-right">
+									<a class="dropdown-item" href="#">Export List</a>
+									<a class="dropdown-item" href="#">Policies</a>
+									<a class="dropdown-item" href="#">View Assets</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			<div class="row">
+							<div class="col-md-4 col-sm-12">
+								<div class="form-group">
+									<label>Service Name</label>
+									<input type="text" id="service_input" class="form-control">
+								</div>
+							</div>
+							<div class="col-md-4 col-sm-12">
+								<label>IP</label>
+								<div class="form-group">
+									<input type="text" id="ip_input" class="form-control">
+								</div>
+							</div>
+							<div class="col-md-4 col-sm-12">
+							<label id="lab">Confirm</label>
+								<div class="form-group">
+
+									<button type="button" onclick="AddService('{{type}}')" class="btn btn-outline-success  " >Add Service</button>
+								</div>
+							</div>
+						</div>
+				<!-- Simple Datatable start -->
+				<div class="card-box mb-30">
+					
+					<div class="pb-20">
+						<table class="data-table table stripe hover nowrap" id="tables">
+							<thead>
+							
+								<tr>
+									<th class="table-plus datatable-nosort">ID</th>
+									<th>Service Name</th>
+									<th>IP</th>
+									
+									<th class="datatable-nosort">Action</th>
+								</tr>
+							</thead>
+							<tbody>
+							{% for data in alldata %}
+								<tr>
+									<td class="table-plus">{{ data.service_id }}</td>
+									<td>{{ data.name }}</td>
+									<td>{{ data.ip }}</td>
+									
+									<td>
+										<div class="dropdown">
+											<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+												<i class="dw dw-more"></i>
+											</a>
+											<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+											
+												<a  onclick="Put_Value('{{data.service_id}}','{{data.name}}','{{data.ip}}')"  class="dropdown-item btn-block" href="#"  data-backdrop="static" data-toggle="modal" data-target="#edit-modal" type="button"><i class="dw dw-edit2" ></i> Edit</a>
+												<a class="dropdown-item color" href="#" data-color="#f56767"><i class="dw dw-delete-3" ></i> Delete</a>
+											</div>
+										</div>
+									</td>
+								</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<!-- Simple Datatable End -->
+				<!-- multiple select row Datatable start -->
+				<div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+  
+					
+					
+				<!-- Checkbox select Datatable End -->
+				<!-- Export Datatable start -->
+				
+				<!-- Export Datatable End -->
+			</div>
+		
+		</div>
+
+		{% endblock %}
+	<!-- js -->
+	{% block scripts %}
+
+	
+	<script src="{% static 'src/plugins/sweetalert2/sweetalert2.all.js' %}"></script>
+	<script src="{% static 'src/plugins/sweetalert2/sweet-alert.init.js' %}"></script>
+
+	<script src="{% static 'src/plugins/datatables/js/jquery.dataTables.min.js' %}"></script>
+	<script src="{% static 'src/plugins/datatables/js/dataTables.bootstrap4.min.js' %}"></script>
+	<script src="{% static 'src/plugins/datatables/js/dataTables.responsive.min.js' %}"></script>
+	<!-- buttons for Export datatable -->
+
+	<!-- Datatable Setting js -->
+	<script src="{% static 'vendors/scripts/datatable-setting.js' %}"></script>
+
+	<!-- add sweet alert js & css in footer -->
+	
+
+	<script>
+
+
+function AddService(service_type){
+   var name=$("#service_input").val();
+   var ip=$("#ip_input").val();
+   if(name & ip){
+   $.ajax({
+   type: "POST",
+   url: '{{ 'add-service/' }}',
+   data: { csrfmiddlewaretoken: '{{ csrf_token }}', "type": service_type ,"name":name,"ip":ip},
+   success: function callback(result){
+               location.reload();
+				
+
+            }
+});
+
+   }
+ 
+   
+}
+
+function StartService(key){
+  
+
+    $.ajax({
+   type: "POST",
+   url: '{{ 'start-service/' }}',
+   data: { csrfmiddlewaretoken: '{{ csrf_token }}', data: key },
+   success: function callback(){
+               console.log("Start");
+            }
+});
+}
+
+
+function StopService(key){
+  $.ajax({
+   type: "POST",
+   url: '{{ 'stop-service/' }}',
+   data: { csrfmiddlewaretoken: '{{ csrf_token }}', data: key },
+   success: function callback(){
+               console.log("stop")
+               
+            }
+});
+}
+
+function Put_Value(id,name,ip){
+	document.getElementById("hid_id").setAttribute("value", id);
+	document.getElementById("hid_name").setAttribute("value", name);
+	document.getElementById("hid_ip").setAttribute("value", ip);
+
+
+}
+
+
+function Submit_Edit(){
+	var name = document.getElementById("hid_name").getAttribute("value")
+	var ip = document.getElementById("hid_ip").getAttribute("value")
+	var id = document.getElementById("hid_id").getAttribute("value")
+	var new_name=document.getElementById("new_name").value
+
+	var new_ip=document.getElementById("new_ip").value
+	
+	if(name && ip && id && new_name && new_ip){
+   $.ajax({
+   type: "POST",
+   url: '{{ 'edit-service/' }}',
+   data: { csrfmiddlewaretoken: '{{ csrf_token }}', "id":id,"new_name":new_name,"new_ip":new_ip},
+   success: function callback(result){ 
+	  toastr.success('Update Successfully', 'Update Server Data');
+               location.reload();
+				 
+
+            }
+});
+}}
+
+
+</script>
+
+	{% endblock %}
+</html>

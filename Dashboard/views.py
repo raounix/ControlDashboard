@@ -9,7 +9,7 @@ from django.core import serializers
 from django.http import HttpResponse
 from django.shortcuts import render
 
-from .models import Service, SoftSwitch
+from .models import Service, SoftSwitch , SBC
 
 
 def MainDashboardPage(request):
@@ -17,26 +17,28 @@ def MainDashboardPage(request):
     json_array = json.load(input_file)
     input_file.close()
 
-    return render(request,"Dashboard_Templates/index.html",json_array)
+    return render(request,"Dashboard_Templates/dash_base.html",json_array)
 
 
 
 
 def MonitoringService(request,slug):
     if(slug=="ssw"):
-       main=Service.objects.filter(Type="ssw")
-       
+        main=Service.objects.filter(Type="ssw")
+        input_file = open ('config/json/service_names.json')
+        json_array = json.load(input_file)
+        input_file.close()
     #    print(main.service_id)
     #    b=SoftSwitch(service_id=main)
     #    b.save()
-       return render(request,"Dashboard_Templates/ServiceMonitoring.html",{"alldata":main,"type":"ssw"})
+        return render(request,"Dashboard_Templates/datatable.html",{"alldata":main,"type":"ssw"})
     elif(slug=="sbc"):
         main=Service.objects.filter(Type="sbc")
        
     #    print(main.service_id)
     #    b=SoftSwitch(service_id=main)
     #    b.save()
-        return render(request,"Dashboard_Templates/ServiceMonitoring.html",{"alldata":main})
+        return render(request,"Dashboard_Templates/datatable.html",{"alldata":main,"type":"sbc"})
 
 
 
@@ -51,9 +53,33 @@ def AddService(request):
         service_object.save()
         ssw_object=SoftSwitch(service_id=service_object)
         ssw_object.save()
-        return HttpResponse("success")
 
-  
+
+        return HttpResponse("ok")
+
+    elif(request.POST['type']=="sbc"):
+        print("ok")
+        Type=str(request.POST['type'])
+        name=str(request.POST['name'])
+        ip=str(request.POST['ip'])
+        service_object=Service(name=name,Type=Type,ip=ip)
+        service_object.save()
+        sbc_object=SBC(service_id=service_object)
+        sbc_object.save()
+        return HttpResponse("ok")
+
+def EditService(request):
+
+    serivce_id=request.POST['id']    
+    new_name=request.POST['new_name']
+    new_ip=request.POST['new_ip']
+
+    edit_model = Service.objects.get(pk=serivce_id)
+    edit_model.name=new_name
+    edit_model.ip=new_ip
+    edit_model.save()
+    main=Service.objects.filter(Type="ssw")
+    return HttpResponse("ok")
 
 
 
