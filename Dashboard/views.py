@@ -24,7 +24,15 @@ def MainDashboardPage(request):
 
 def MonitoringService(request,slug):
     try : 
-        if(slug=="ssw"):
+        if(slug=="all-service"):
+            main=Service.objects.all()
+            input_file = open ('config/json/service_names.json')
+            json_array = json.load(input_file)
+            input_file.close()
+            return render(request,"Dashboard_Templates/datatable.html",{"alldata":main,"type":"all","all":json_array})
+
+
+        elif(slug=="ssw"):
             main=Service.objects.filter(Type="ssw")
             input_file = open ('config/json/service_names.json')
             json_array = json.load(input_file)
@@ -36,6 +44,8 @@ def MonitoringService(request,slug):
         elif(slug=="sbc"):
             main=Service.objects.filter(Type="sbc")
             return render(request,"Dashboard_Templates/datatable.html",{"alldata":main,"type":"sbc"})
+        else:
+            return render(request,"Dashboard_Templates/404.html")
     except:
         return HttpResponse("error")
 
@@ -67,6 +77,7 @@ def AddService(request):
             sbc_object=SBC(service_id=service_object)
             sbc_object.save()
             return HttpResponse("ok")
+        
     except:
         return HttpResponse("error")
 

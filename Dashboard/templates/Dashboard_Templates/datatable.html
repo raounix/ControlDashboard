@@ -70,27 +70,37 @@
 						</div>
 					</div>
 				</div>
+				{% if type != "all" %}
 			<div class="row">
-							<div class="col-md-4 col-sm-12">
+							<div class="col-md-5 col-sm-12">
 								<div class="form-group">
 									<label>Service Name</label>
 									<input type="text" id="service_input" class="form-control">
 								</div>
 							</div>
-							<div class="col-md-4 col-sm-12">
+							<div class="col-md-5 col-sm-12">
 								<label>IP</label>
 								<div class="form-group">
 									<input type="text" id="ip_input" class="form-control">
 								</div>
 							</div>
-							<div class="col-md-4 col-sm-12">
+							
+							
+						
+							
+							{% comment %} {% for service in all.service %}
+								{{service.name}}	
+							{% endfor %} {% endcomment %}
+
+							<div class="col-md-2 col-sm-12">
 							<label id="lab">Confirm</label>
 								<div class="form-group">
 
 									<button type="button" onclick="AddService('{{type}}')" class="btn btn-outline-success  " >Add Service</button>
 								</div>
 							</div>
-						</div>
+			</div>
+				{% endif %}
 				<!-- Simple Datatable start -->
 				<div class="card-box mb-30">
 					
