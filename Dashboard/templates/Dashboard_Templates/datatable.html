@@ -84,14 +84,6 @@
 									<input type="text" id="ip_input" class="form-control">
 								</div>
 							</div>
-							
-							
-						
-							
-							{% comment %} {% for service in all.service %}
-								{{service.name}}	
-							{% endfor %} {% endcomment %}
-
 							<div class="col-md-2 col-sm-12">
 							<label id="lab">Confirm</label>
 								<div class="form-group">
@@ -99,6 +91,14 @@
 									<button type="button" onclick="AddService('{{type}}')" class="btn btn-outline-success  " >Add Service</button>
 								</div>
 							</div>
+							
+						
+							
+							{% comment %} {% for service in all.service %}
+								{{service.name}}	
+							{% endfor %} {% endcomment %}
+
+							
 			</div>
 				{% endif %}
 				<!-- Simple Datatable start -->
@@ -178,7 +178,28 @@
 
 
 //////////////////////////////////////////////////////////////////////////////////////
+function AddService(service_type){
 
+   var name=$("#service_input").val();
+   var ip=$("#ip_input").val();
+   if(name && ip){
+   $.ajax({
+   type: "POST",
+   url: '{{ 'add-service/' }}',
+   data: { csrfmiddlewaretoken: '{{ csrf_token }}', "type": service_type ,"name":name,"ip":ip},
+   success: function callback(result){
+               location.reload();
+				
+
+            }
+});
+
+   }
+ 
+   
+}
+
+//////////////////////////////////////////////////////////////////////////////////////
 
 function StartService(key){
   
@@ -209,6 +230,8 @@ function StopService(key){
 }
 
 
+
+
 //////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -225,27 +248,6 @@ function Put_Value(id,name,ip){
 
 //////////////////////////////////////////////////////////////////////////////////////
 
-function AddService(service_type){
-   var name=$("#service_input").val();
-   var ip=$("#ip_input").val();
-   if(name & ip){
-   $.ajax({
-   type: "POST",
-   url: '{{ 'add-service/' }}',
-   data: { csrfmiddlewaretoken: '{{ csrf_token }}', "type": service_type ,"name":name,"ip":ip},
-   success: function callback(result){
-               location.reload();
-				
-
-            }
-});
-
-   }
- 
-   
-}
-
-//////////////////////////////////////////////////////////////////////////////////////
 
 function Submit_Edit(){
 	var name = document.getElementById("hid_name").getAttribute("value")
