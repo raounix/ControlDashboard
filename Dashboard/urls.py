@@ -10,7 +10,7 @@ urlpatterns=[
     #  path('stop-service/',views.StopService),
     path('add-service/',views.AddService),
     path('edit-service/',views.EditService),
-   
+    path('deleting-service/',views.DeleteService),
 
 ]
 

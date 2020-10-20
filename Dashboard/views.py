@@ -23,63 +23,82 @@ def MainDashboardPage(request):
 
 
 def MonitoringService(request,slug):
-    if(slug=="ssw"):
-        main=Service.objects.filter(Type="ssw")
-        input_file = open ('config/json/service_names.json')
-        json_array = json.load(input_file)
-        input_file.close()
-    #    print(main.service_id)
-    #    b=SoftSwitch(service_id=main)
-    #    b.save()
-        return render(request,"Dashboard_Templates/datatable.html",{"alldata":main,"type":"ssw"})
-    elif(slug=="sbc"):
-        main=Service.objects.filter(Type="sbc")
-       
-    #    print(main.service_id)
-    #    b=SoftSwitch(service_id=main)
-    #    b.save()
-        return render(request,"Dashboard_Templates/datatable.html",{"alldata":main,"type":"sbc"})
+    try : 
+        if(slug=="ssw"):
+            main=Service.objects.filter(Type="ssw")
+            input_file = open ('config/json/service_names.json')
+            json_array = json.load(input_file)
+            input_file.close()
+    
+            return render(request,"Dashboard_Templates/datatable.html",{"alldata":main,"type":"ssw"})
+            
+
+        elif(slug=="sbc"):
+            main=Service.objects.filter(Type="sbc")
+            return render(request,"Dashboard_Templates/datatable.html",{"alldata":main,"type":"sbc"})
+    except:
+        return HttpResponse("error")
 
 
 
 
 
 def AddService(request):
-    if(request.POST['type']=="ssw"):
-        Type=str(request.POST['type'])
-        name=str(request.POST['name'])
-        ip=str(request.POST['ip'])
-        service_object=Service(name=name,Type=Type,ip=ip)
-        service_object.save()
-        ssw_object=SoftSwitch(service_id=service_object)
-        ssw_object.save()
+    try:
+        if(request.POST['type']=="ssw"):
+            Type=str(request.POST['type'])
+            name=str(request.POST['name'])
+            ip=str(request.POST['ip'])
+            service_object=Service(name=name,Type=Type,ip=ip)
+            service_object.save()
+            ssw_object=SoftSwitch(service_id=service_object)
+            ssw_object.save()
 
 
-        return HttpResponse("ok")
+            return HttpResponse("ok")
 
-    elif(request.POST['type']=="sbc"):
-        print("ok")
-        Type=str(request.POST['type'])
-        name=str(request.POST['name'])
-        ip=str(request.POST['ip'])
-        service_object=Service(name=name,Type=Type,ip=ip)
-        service_object.save()
-        sbc_object=SBC(service_id=service_object)
-        sbc_object.save()
-        return HttpResponse("ok")
+        elif(request.POST['type']=="sbc"):
+            
+            Type=str(request.POST['type'])
+            name=str(request.POST['name'])
+            ip=str(request.POST['ip'])
+            service_object=Service(name=name,Type=Type,ip=ip)
+            service_object.save()
+            sbc_object=SBC(service_id=service_object)
+            sbc_object.save()
+            return HttpResponse("ok")
+    except:
+        return HttpResponse("error")
+
+
+
 
 def EditService(request):
+    try:
+        serivce_id=request.POST['id']    
+        new_name=request.POST['new_name']
+        new_ip=request.POST['new_ip']
 
-    serivce_id=request.POST['id']    
-    new_name=request.POST['new_name']
-    new_ip=request.POST['new_ip']
+        edit_model = Service.objects.get(pk=serivce_id)
+        edit_model.name=new_name
+        edit_model.ip=new_ip
+        edit_model.save()
+        main=Service.objects.filter(Type="ssw")
+        return HttpResponse("ok")
+    except:
+        return HttpResponse("error")
 
-    edit_model = Service.objects.get(pk=serivce_id)
-    edit_model.name=new_name
-    edit_model.ip=new_ip
-    edit_model.save()
-    main=Service.objects.filter(Type="ssw")
-    return HttpResponse("ok")
+
+
+def DeleteService(request):
+    
+    try:
+        serivce_id=request.POST['id']
+        delete_model = Service.objects.filter(pk=serivce_id).delete()
+        return HttpResponse("ok")
+    except:
+        return HttpResponse("error")
+
 
 
 

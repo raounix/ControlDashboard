@@ -121,7 +121,7 @@
 											<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
 											
 												<a  onclick="Put_Value('{{data.service_id}}','{{data.name}}','{{data.ip}}')"  class="dropdown-item btn-block" href="#"  data-backdrop="static" data-toggle="modal" data-target="#edit-modal" type="button"><i class="dw dw-edit2" ></i> Edit</a>
-												<a class="dropdown-item color" href="#" data-color="#f56767"><i class="dw dw-delete-3" ></i> Delete</a>
+												<a  onclick="DeleteService('{{data.service_id}}')" class="dropdown-item color" href="#" data-color="#f56767"><i class="dw dw-delete-3" ></i> Delete</a>
 											</div>
 										</div>
 									</td>
@@ -167,6 +167,54 @@
 	<script>
 
 
+//////////////////////////////////////////////////////////////////////////////////////
+
+
+function StartService(key){
+  
+
+    $.ajax({
+   type: "POST",
+   url: '{{ 'start-service/' }}',
+   data: { csrfmiddlewaretoken: '{{ csrf_token }}', data: key },
+   success: function callback(){
+               console.log("Start");
+            }
+});
+}
+
+//////////////////////////////////////////////////////////////////////////////////////
+
+
+function StopService(key){
+  $.ajax({
+   type: "POST",
+   url: '{{ 'stop-service/' }}',
+   data: { csrfmiddlewaretoken: '{{ csrf_token }}', data: key },
+   success: function callback(){
+               console.log("stop")
+               
+            }
+});
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////
+
+
+function Put_Value(id,name,ip){
+	document.getElementById("hid_id").setAttribute("value", id);
+	document.getElementById("hid_name").setAttribute("value", name);
+	document.getElementById("hid_ip").setAttribute("value", ip);
+
+
+}
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////
+
 function AddService(service_type){
    var name=$("#service_input").val();
    var ip=$("#ip_input").val();
@@ -187,40 +235,7 @@ function AddService(service_type){
    
 }
 
-function StartService(key){
-  
-
-    $.ajax({
-   type: "POST",
-   url: '{{ 'start-service/' }}',
-   data: { csrfmiddlewaretoken: '{{ csrf_token }}', data: key },
-   success: function callback(){
-               console.log("Start");
-            }
-});
-}
-
-
-function StopService(key){
-  $.ajax({
-   type: "POST",
-   url: '{{ 'stop-service/' }}',
-   data: { csrfmiddlewaretoken: '{{ csrf_token }}', data: key },
-   success: function callback(){
-               console.log("stop")
-               
-            }
-});
-}
-
-function Put_Value(id,name,ip){
-	document.getElementById("hid_id").setAttribute("value", id);
-	document.getElementById("hid_name").setAttribute("value", name);
-	document.getElementById("hid_ip").setAttribute("value", ip);
-
-
-}
-
+//////////////////////////////////////////////////////////////////////////////////////
 
 function Submit_Edit(){
 	var name = document.getElementById("hid_name").getAttribute("value")
@@ -244,6 +259,22 @@ function Submit_Edit(){
 });
 }}
 
+//////////////////////////////////////////////////////////////////////////////////////
+
+function DeleteService(key){
+  $.ajax({
+   type: "POST",
+   url: '{{ 'deleting-service/' }}',
+   data: { csrfmiddlewaretoken: '{{ csrf_token }}', "id": key },
+   success: function callback(){
+                location.reload();
+               
+            }
+});
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////
 
 </script>
 
