@@ -9,30 +9,35 @@ app.config["DEBUG"]=False
 # @app.route('status',methods=['GET'])
 # def Status(request) 
 
-@app.route('/',methods=['POST'])
+@app.route('/start',methods=['POST'])
 def StartService():
 
     try:
-        
-
-        return (request.form["test"])
+        service=request.json['service_name']
+        # os.system("service "+service+" start")
+        print(request.json['service_list'][1]['name'])
+        return (request.json)
         
         
     except:
-        pass
+        return("fail")
     
-    # service=str(request.POST['data'])
-    # service=service.replace(".service","")
-    # os.system("service "+service+" start")
-    # return HttpResponse(request.POST['Success'])
 
 
-# @app.route('/',methods=['GET'])
-# def StopService(request):
-#     service=str(request.POST['data'])
-#     service=service.replace(".service","")
-#     os.system("service "+service+" stop")
-#     # return HttpResponse(request.POST['data'])
+@app.route('/stop',methods=['POST'])
+def StopService():
+        service=request.json['service_name']
+        os.system("service "+service+" stop")
+        return("ok")
+        # return HttpResponse(request.POST['data'])
 
+def GetAllStatus():
+        pass
 
 app.run()
+
+
+    # service=str(request.POST['data'])
+    # service=service.replace(".service","")
+    
+    # return HttpResponse(request.POST['Success'])
