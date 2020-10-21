@@ -113,14 +113,4 @@ def DeleteService(request):
 
 
 
-def StartService(request):
-    service=str(request.POST['data'])
-    service=service.replace(".service","")
-    os.system("service "+service+" start")
-    # return HttpResponse(request.POST['Success'])
 
-def StopService(request):
-    service=str(request.POST['data'])
-    service=service.replace(".service","")
-    os.system("service "+service+" stop")
-    # return HttpResponse(request.POST['data'])
