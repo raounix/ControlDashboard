@@ -111,29 +111,28 @@
 								<tr>
 									<th class="table-plus datatable-nosort">ID</th>
 									<th>Service Name</th>
+									<th>Type</th>
 									<th>IP</th>
 									
-									<th class="datatable-nosort">Action</th>
+									<th class="datatable-nosort">Action(Edit)</th>
+									<th class="datatable-nosort">Action(Delete)</th>
 								</tr>
 							</thead>
 							<tbody>
 							{% for data in alldata %}
 								<tr>
-									<td class="table-plus">{{ data.service_id }}</td>
+									<td class="table-plus">{{ data.server_id }}</td>
 									<td>{{ data.name }}</td>
+									<td>{{data.Type | upper }}</td>
 									<td>{{ data.ip }}</td>
 									
 									<td>
-										<div class="dropdown">
-											<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-												<i class="dw dw-more"></i>
-											</a>
-											<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-											
-												<a  onclick="Put_Value('{{data.service_id}}','{{data.name}}','{{data.ip}}')"  class="dropdown-item btn-block" href="#"  data-backdrop="static" data-toggle="modal" data-target="#edit-modal" type="button"><i class="dw dw-edit2" ></i> Edit</a>
-												<a  onclick="DeleteService('{{data.service_id}}')" class="dropdown-item color" href="#" data-color="#f56767"><i class="dw dw-delete-3" ></i> Delete</a>
-											</div>
-										</div>
+																					
+												<a  onclick="Put_Value('{{data.server_id}}','{{data.name}}','{{data.ip}}')"   href="#"  data-backdrop="static" data-toggle="modal" data-target="#edit-modal" type="button"><i class="dw dw-edit2" ></i> Edit</a>
+									</td>
+									<td>
+												<a  onclick="DeleteService('{{data.server_id}}')"  href="#" data-color="#f56767"><i class="dw dw-delete-3" ></i> Delete</a>
+
 									</td>
 								</tr>
 								{% endfor %}
