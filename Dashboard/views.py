@@ -9,11 +9,11 @@ from django.core import serializers
 from django.http import HttpResponse
 from django.shortcuts import render
 
-from .models import Service, SoftSwitch , SBC
+from .models import Server,SSWConfig,SSW
 
 
 def MainDashboardPage(request):
-    input_file = open ('config/json/service_names.json')
+    input_file = open ('config/json/rules.json')
     json_array = json.load(input_file)
     input_file.close()
 
@@ -22,27 +22,29 @@ def MainDashboardPage(request):
 
 
 
-def MonitoringService(request,slug):
+def MonitoringServer(request,slug):
     try : 
         if(slug=="all-service"):
-            main=Service.objects.all()
-            input_file = open ('config/json/service_names.json')
+            main=Server.objects.all()
+            input_file = open ('config/json/rules.json')
             json_array = json.load(input_file)
             input_file.close()
             return render(request,"Dashboard_Templates/datatable.html",{"alldata":main,"type":"all","all":json_array})
 
 
         elif(slug=="ssw"):
-            main=Service.objects.filter(Type="ssw")
-            input_file = open ('config/json/service_names.json')
-            json_array = json.load(input_file)
-            input_file.close()
+            main=Server.objects.filter(Type="ssw")
+            # input_file = open ('config/json/rules.json')
+            # json_array = json.load(input_file)
+            # input_file.close()
     
             return render(request,"Dashboard_Templates/datatable.html",{"alldata":main,"type":"ssw"})
             
 
         elif(slug=="sbc"):
-            main=Service.objects.filter(Type="sbc")
+            
+            main=Server.objects.filter(Type="sbc")
+            
             return render(request,"Dashboard_Templates/datatable.html",{"alldata":main,"type":"sbc"})
         else:
             return render(request,"Dashboard_Templates/404.html")
@@ -53,15 +55,15 @@ def MonitoringService(request,slug):
 
 
 
-def AddService(request):
+def AddServer(request):
     try:
         if(request.POST['type']=="ssw"):
             Type=str(request.POST['type'])
             name=str(request.POST['name'])
             ip=str(request.POST['ip'])
-            service_object=Service(name=name,Type=Type,ip=ip)
-            service_object.save()
-            ssw_object=SoftSwitch(service_id=service_object)
+            server_object=Server(name=name,Type=Type,ip=ip)
+            server_object.save()
+            ssw_object=SSW(server_id=server_object)
             ssw_object.save()
 
 
@@ -72,9 +74,9 @@ def AddService(request):
             Type=str(request.POST['type'])
             name=str(request.POST['name'])
             ip=str(request.POST['ip'])
-            service_object=Service(name=name,Type=Type,ip=ip)
+            service_object=Server(name=name,Type=Type,ip=ip)
             service_object.save()
-            sbc_object=SBC(service_id=service_object)
+            sbc_object=SBC(service_id=server_object)
             sbc_object.save()
             return HttpResponse("ok")
         
@@ -84,28 +86,28 @@ def AddService(request):
 
 
 
-def EditService(request):
+def EditServer(request):
     try:
-        serivce_id=request.POST['id']    
+        server_id=request.POST['id']    
         new_name=request.POST['new_name']
         new_ip=request.POST['new_ip']
 
-        edit_model = Service.objects.get(pk=serivce_id)
+        edit_model = Server.objects.get(pk=server_id)
         edit_model.name=new_name
         edit_model.ip=new_ip
         edit_model.save()
-        main=Service.objects.filter(Type="ssw")
+        main=Server.objects.filter(Type="ssw")
         return HttpResponse("ok")
     except:
         return HttpResponse("error")
 
 
 
-def DeleteService(request):
+def DeleteServer(request):
     
     try:
-        serivce_id=request.POST['id']
-        delete_model = Service.objects.filter(pk=serivce_id).delete()
+        server_id=request.POST['id']
+        delete_model = Server.objects.filter(pk=server_id).delete()
         return HttpResponse("ok")
     except:
         return HttpResponse("error")

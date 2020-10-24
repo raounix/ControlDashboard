@@ -1,10 +1,12 @@
 from django.contrib import admin
-from .models import Service,SoftSwitch,SBC
+from .models import Server,SSW,SSWConfig,SBC,SBCConfig
 # Register your models here.
 
 
 
 
-admin.site.register(Service)
-admin.site.register(SoftSwitch)
+admin.site.register(Server)
+admin.site.register(SSW)
+admin.site.register(SSWConfig)
 admin.site.register(SBC)
+admin.site.register(SBCConfig)

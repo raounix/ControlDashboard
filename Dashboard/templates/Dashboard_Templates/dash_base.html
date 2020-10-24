@@ -240,10 +240,10 @@
 							<span class="micon dw dw-board"></span><span class="mtext">Show All Service</span>
 						</a>
 					</li>
-					{% for service_type in service %}
+					{% for rules_type in all.rules %}
 					<li>
-						<a href="{{ service_type.name }}" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-worldwide"></span><span class="mtext">{{ service_type.name }}</span>
+						<a href="{{ rules_type.name }}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-worldwide"></span><span class="mtext">{{ rules_type.name }}</span>
 						</a>
 					</li>
 					
