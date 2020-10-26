@@ -10,7 +10,7 @@ Type = (
 
 class Server(models.Model):
     server_id=models.AutoField(primary_key=True,unique=True,null=False)
-    name=models.CharField(max_length=50)
+    name=models.CharField(unique = True ,max_length=50)
     ip=models.GenericIPAddressField()
     Type=models.CharField(max_length=20,choices=Type,default='ssw')
     def __str__(self):

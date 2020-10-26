@@ -8,7 +8,7 @@ import sys
 from django.core import serializers
 from django.http import HttpResponse
 from django.shortcuts import render
-
+import readjson
 from .models import Server,SSWConfig,SBCConfig,SSW,SBC
 
 
@@ -29,6 +29,9 @@ def MonitoringServer(request,slug):
             input_file = open ('config/json/rules.json')
             json_array = json.load(input_file)
             input_file.close()
+            
+            
+            readjson.check_all_service(main)
             return render(request,"Dashboard_Templates/datatable.html",{"alldata":main,"type":"all","all":json_array})
 
 

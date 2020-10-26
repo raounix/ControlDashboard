@@ -1,0 +1,26 @@
+{
+    "rules": {
+        "ssw": {
+            "service": [{
+
+                    "name": "nordvpn"
+                },
+                {
+                    "name": "openvpn"
+                }
+            ]
+        },
+        "sbc": {
+            "service": [{
+
+                    "name": "nordvpn"
+                },
+                {
+                    "name": "openvpn"
+                }
+            ]
+        }
+
+
+    }
+}
