@@ -40,7 +40,7 @@ class SSWConfig(models.Model):
 class SSW(models.Model):
     ssw_id = models.AutoField(primary_key=True,unique=True,null=False)
     server_id=models.OneToOneField(Server,on_delete=models.CASCADE)
-    config=models.OneToOneField(SSWConfig,on_delete=models.CASCADE)
+    # config=models.OneToOneField(SSWConfig,on_delete=models.CASCADE)
     
     def __str__(self):
         return str( "server id :"+ (str(self.server_id.server_id)))
@@ -50,7 +50,7 @@ class SSW(models.Model):
 class SBC(models.Model):
     sbc_id = models.AutoField(primary_key=True,unique=True,null=False)
     server_id=models.OneToOneField(Server,on_delete=models.CASCADE)
-    config=models.OneToOneField(SBCConfig,on_delete=models.CASCADE)
+    # config=models.OneToOneField(SBCConfig,on_delete=models.CASCADE)
     
     def __str__(self):
         return str( "server id :"+ (str(self.server_id.server_id)))

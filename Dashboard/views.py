@@ -9,7 +9,7 @@ from django.core import serializers
 from django.http import HttpResponse
 from django.shortcuts import render
 
-from .models import Server,SSWConfig,SSW
+from .models import Server,SSWConfig,SBCConfig,SSW,SBC
 
 
 def MainDashboardPage(request):
@@ -46,6 +46,8 @@ def MonitoringServer(request,slug):
             main=Server.objects.filter(Type="sbc")
             
             return render(request,"Dashboard_Templates/datatable.html",{"alldata":main,"type":"sbc"})
+
+
         else:
             return render(request,"Dashboard_Templates/404.html")
     except:
@@ -72,12 +74,15 @@ def AddServer(request):
         elif(request.POST['type']=="sbc"):
             
             Type=str(request.POST['type'])
+            
             name=str(request.POST['name'])
             ip=str(request.POST['ip'])
-            service_object=Server(name=name,Type=Type,ip=ip)
-            service_object.save()
-            sbc_object=SBC(service_id=server_object)
+            server_object=Server(name=name,Type=Type,ip=ip)
+            server_object.save()
+            sbc_object=SBC(server_id=server_object)
             sbc_object.save()
+
+
             return HttpResponse("ok")
         
     except:
