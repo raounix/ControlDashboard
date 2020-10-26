@@ -9,6 +9,8 @@ app.config["DEBUG"]=False
 # @app.route('status',methods=['GET'])
 # def Status(request) 
 
+#############################################################################
+
 @app.route('/start',methods=['POST'])
 def StartService():
 
@@ -22,7 +24,7 @@ def StartService():
     except:
         return("fail")
     
-
+#############################################################################
 
 @app.route('/stop',methods=['POST'])
 def StopService():
@@ -31,6 +33,10 @@ def StopService():
         return("ok")
         # return HttpResponse(request.POST['data'])
 
+
+#############################################################################
+
+@app.route('/status',methods=['POST'])
 def GetAllStatus():
         pass
 

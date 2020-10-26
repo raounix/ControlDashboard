@@ -6,6 +6,7 @@
  <input type="hidden" id="hid_id" value="" />
  <input type="hidden" id="hid_name" value="" />
 <input type="hidden" id="hid_ip" value="" />
+<input type="hidden" id="delete_ip" value="" />
 
 
  <div id="modals">
@@ -37,10 +38,33 @@
 									</div>
 								</div>
 							</div>
+
+
+							
 </div>
 
 
 
+			<div id="delete-modal">
+							<input type="hidden" id="hid_ip" value="" />
+
+						
+							<div class="modal fade" id="warning-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+								<div class="modal-dialog modal-sm modal-dialog-centered">
+									<div class="modal-content bg-warning">
+										<div class="modal-body text-center">
+											<h3 class="mb-15"><i class="fa fa-exclamation-triangle"></i> Warning</h3>
+											<p>Do You Want Delete it ? </p>
+											<button type="button" class="btn btn-dark" data-dismiss="modal" onclick="DeleteService()">Yes</button>
+											<button type="button" class="btn btn-dark" data-dismiss="modal">No</button>
+										</div>
+									</div>
+								</div>
+							</div>
+
+
+
+			</div>
 		<div class="pd-ltr-20 xs-pd-20-10">
 			<div class="min-height-200px">
 				<div class="page-header">
@@ -56,6 +80,7 @@
 								</ol>
 							</nav>
 						</div>
+						
 						<div class="col-md-6 col-sm-12 text-right">
 							<div class="dropdown">
 								<a class="btn btn-primary dropdown-toggle" href="#" role="button" data-toggle="dropdown">
@@ -109,8 +134,8 @@
 							<thead>
 							
 								<tr>
-									<th class="table-plus datatable-nosort">ID</th>
-									<th>Service Name</th>
+									<th class="datatable-nosort">ID</th>
+									<th >Service Name</th>
 									<th>Type</th>
 									<th>IP</th>
 									
@@ -128,10 +153,10 @@
 									
 									<td>
 																					
-												<a  onclick="Put_Value('{{data.server_id}}','{{data.name}}','{{data.ip}}')"   href="#"  data-backdrop="static" data-toggle="modal" data-target="#edit-modal" type="button"><i class="dw dw-edit2" ></i> Edit</a>
+												<a  onclick="Put_Value('{{data.server_id}}','{{data.name}}','{{data.ip}}')"   href="#"  data-backdrop="static" data-toggle="modal" data-target="#edit-modal" type="button" ><i class="dw dw-edit2" ></i> Edit</a>
 									</td>
 									<td>
-												<a  onclick="DeleteService('{{data.server_id}}')"  href="#" data-color="#f56767"><i class="dw dw-delete-3" ></i> Delete</a>
+												<a  onclick="PutDeleteValue('{{data.server_id}}')"  href="#" data-color="#f56767" data-toggle="modal" data-target="#warning-modal" ><i class="dw dw-delete-3" ></i> Delete</a>
 
 									</td>
 								</tr>
@@ -233,7 +258,10 @@ function StopService(key){
 
 //////////////////////////////////////////////////////////////////////////////////////
 
+function PutDeleteValue(id){
+	document.getElementById("delete_ip").setAttribute("value", id);
 
+}
 function Put_Value(id,name,ip){
 	document.getElementById("hid_id").setAttribute("value", id);
 	document.getElementById("hid_name").setAttribute("value", name);
@@ -272,7 +300,8 @@ function Submit_Edit(){
 
 //////////////////////////////////////////////////////////////////////////////////////
 
-function DeleteService(key){
+function DeleteService(){
+	var key = document.getElementById("delete_ip").getAttribute("value")
   $.ajax({
    type: "POST",
    url: '{{ 'deleting-service/' }}',
