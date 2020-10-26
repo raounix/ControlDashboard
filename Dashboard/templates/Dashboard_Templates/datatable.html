@@ -291,7 +291,7 @@ function Submit_Edit(){
    data: { csrfmiddlewaretoken: '{{ csrf_token }}', "id":id,"new_name":new_name,"new_ip":new_ip},
    success: function callback(result){ 
 	  toastr.success('Update Successfully', 'Update Server Data');
-               location.reload();
+               	location.reload();
 				 
 
             }
