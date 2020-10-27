@@ -18,7 +18,7 @@ $('document').ready(function() {
         },
 
         'order': [
-            [4, 'asc']
+            [5, 'asc']
         ]
     });
 

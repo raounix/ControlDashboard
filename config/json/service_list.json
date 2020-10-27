@@ -16,7 +16,7 @@
                     "name": "nordvpn"
                 },
                 {
-                    "name": "openvpn"
+                    "name": "ssh"
                 }
             ]
         }

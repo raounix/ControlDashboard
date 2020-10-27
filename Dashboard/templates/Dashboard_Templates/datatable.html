@@ -126,6 +126,7 @@
 							
 			</div>
 				{% endif %}
+				
 				<!-- Simple Datatable start -->
 				<div class="card-box mb-30">
 					
@@ -138,28 +139,51 @@
 									<th >Service Name</th>
 									<th>Type</th>
 									<th >IP</th>
-									
-									<th >Action(Edit)</th>
-									<th >Action(Delete)</th>
+									<th >Status</td>
+									<th>Actions</th>
+									<th>Start/Stop</td> 
 								</tr>
 							</thead>
 							<tbody>
+							
 							{% for data in alldata %}
+							{% for key,value in status.items %}
+							
+							{% if data.name == key %}
 								<tr>
 									<td class="table-plus">{{ data.server_id }}</td>
 									<td>{{ data.name }}</td>
 									<td>{{data.Type | upper }}</td>
 									<td>{{ data.ip }}</td>
-									
+									{% if value == 'disable' %}
+									<th data-color="#f56767" >{{value}}</td>
+									{% elif value == 'enable' %}
+									<th data-color="#33cc33" >{{value}}</td>
+									{% endif %}
 									<td>
-																					
+									<div class="row">
+										<div style="padding-right:10px">					
 												<a  onclick="Put_Value('{{data.server_id}}','{{data.name}}','{{data.ip}}')"   href="#"  data-backdrop="static" data-toggle="modal" data-target="#edit-modal" type="button" ><i class="dw dw-edit2" ></i> Edit</a>
+										</div>
+										<div style="padding-right:10px">
+												<a  onclick="PutDeleteValue('{{data.server_id}}')"  href="#" data-color="#f56767" data-toggle="modal" data-target="#warning-modal" ><i class="dw dw-delete-3" ></i> Delete</a>
+										</div>
+									
+										</div>
 									</td>
 									<td>
-												<a  onclick="PutDeleteValue('{{data.server_id}}')"  href="#" data-color="#f56767" data-toggle="modal" data-target="#warning-modal" ><i class="dw dw-delete-3" ></i> Delete</a>
+									{% if value == 'disable' %}
+									<a   href="#"    type="button" data-color="#33cc33"><i class="dw dw-right-arrow-4"  ></i> Start</a>
 
+									{% elif value == 'enable' %}
+									<a   href="#"    type="button" data-color="#f56767"><i class="dw dw-stop"   ></i> Stop</a>
+									{% endif %}
 									</td>
+								
 								</tr>
+								{% endif %}
+								{% endfor %}
+
 								{% endfor %}
 							</tbody>
 						</table>
