@@ -4,11 +4,14 @@ import collections
 import flask
 import requests
 from django.core import serializers
+from django.http import HttpResponse
 from flask import request, jsonify
 
 app = flask.Flask(__name__)
 app.config["DEBUG"]=False
 
+
+#########################################################################################
 
 def check_service_status(Type):
     is_enable=True
@@ -29,6 +32,31 @@ def check_service_status(Type):
 
 
 
+                
+#########################################################################################
+
+#########################################################################################
+
+
+## Routing Section
+
+
+
+@app.route('/check-status',methods=['POST'])
+def CheckStatus():
+    Type=request.json['type']
+    is_enable=check_service_status(Type)
+    if(is_enable==True):
+        return "enable"
+    else:
+        return "disable"
+
+#########################################################################################
+
+#########################################################################################
+
+
+      
 # @app.route('/stop',methods=['POST'])
 # def check_all_service(server_file):
 #     result=collections.defaultdict(dict)
@@ -42,18 +70,7 @@ def check_service_status(Type):
 #         result[server.name]['status'] =status
     
 #     result=dict(result)
-#     print(result)
-
-@app.route('/test',methods=['POST'])
-def test():
-    Type=request.json['type']
-    is_enable=check_service_status(Type)
-    if(is_enable==True):
-        return "enable"
-    else:
-        return "disable"
-        
-        
+#     print(result)  
 
 
 

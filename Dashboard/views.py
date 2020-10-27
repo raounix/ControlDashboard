@@ -22,7 +22,7 @@ def MainDashboardPage(request):
 
 
 def MonitoringServer(request,slug):
-    # try : 
+    try : 
         if(slug=="all-service"):
             main=Server.objects.all()
             input_file = open ('config/json/rules.json')
@@ -31,7 +31,7 @@ def MonitoringServer(request,slug):
             status={}
             for server in main:
                 data={'name':server.server_id,'type':server.Type}
-                r=requests.post(url="http://127.0.0.1:5000/test",json=data)
+                r=requests.post(url="http://127.0.0.1:5000/check-status",json=data)
                 status[server.name]=r.text
             
             
@@ -47,7 +47,7 @@ def MonitoringServer(request,slug):
             
             for server in main:
                 data={'name':server.server_id,'type':server.Type}
-                r=requests.post(url="http://127.0.0.1:5000/test",json=data)
+                r=requests.post(url="http://127.0.0.1:5000/check-status",json=data)
                 status[server.name]=r.text
     
             return render(request,"Dashboard_Templates/datatable.html",{"alldata":main,"type":"ssw",'status':status})
@@ -58,15 +58,15 @@ def MonitoringServer(request,slug):
             main=Server.objects.filter(Type="sbc")
             for server in main:
                 data={'name':server.server_id,'type':server.Type}
-                r=requests.post(url="http://127.0.0.1:5000/test",json=data)
+                r=requests.post(url="http://127.0.0.1:5000/check-status",json=data)
                 status[server.name]=r.text
             return render(request,"Dashboard_Templates/datatable.html",{"alldata":main,"type":"sbc",'status':status})
 
 
         else:
             return render(request,"Dashboard_Templates/404.html")
-    # except:
-    #     return HttpResponse("error")
+    except:
+        return HttpResponse("error")
 
 
 
@@ -116,7 +116,6 @@ def EditServer(request):
         edit_model.name=new_name
         edit_model.ip=new_ip
         edit_model.save()
-        main=Server.objects.filter(Type="ssw")
         return HttpResponse("ok")
     except:
         return HttpResponse("error")
@@ -127,10 +126,38 @@ def DeleteServer(request):
     
     try:
         server_id=request.POST['id']
-        delete_model = Server.objects.filter(pk=server_id).delete()
+        Server.objects.filter(pk=server_id).delete()
         return HttpResponse("ok")
     except:
         return HttpResponse("error")
+
+
+def start_service(request):
+    try:
+        Type=request.POST['type']
+        input_file = open ('config/json/service_list.json')
+        service_list = json.load(input_file)
+        input_file.close()
+        for service in service_list['rules'][Type]['service']:
+            os.system("service "+ service['name'] + " start")
+        return HttpResponse("ok")
+    except:
+        return HttpResponse("fail")
+
+
+
+
+def stop_service(request):
+    try:
+        Type=request.POST['type']
+        input_file = open ('config/json/service_list.json')
+        service_list = json.load(input_file)
+        input_file.close()
+        for service in service_list['rules'][Type]['service']:
+            os.system("service "+ service['name'] + " stop")
+        return HttpResponse("ok")
+    except:
+        return HttpResponse("fail")
 
 
 

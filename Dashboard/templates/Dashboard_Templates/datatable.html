@@ -173,10 +173,10 @@
 									</td>
 									<td>
 									{% if value == 'disable' %}
-									<a   href="#"    type="button" data-color="#33cc33"><i class="dw dw-right-arrow-4"  ></i> Start</a>
+									<a  onclick="StartService('{{data.ip}}','{{data.Type}}')"  href="#"    type="button" data-color="#33cc33"><i class="dw dw-right-arrow-4"  ></i> Start</a>
 
 									{% elif value == 'enable' %}
-									<a   href="#"    type="button" data-color="#f56767"><i class="dw dw-stop"   ></i> Stop</a>
+									<a   onclick="StopService('{{data.ip}}','{{data.Type}}')" href="#"    type="button" data-color="#f56767"><i class="dw dw-stop"   ></i> Stop</a>
 									{% endif %}
 									</td>
 								
@@ -249,15 +249,15 @@ function AddService(service_type){
 
 //////////////////////////////////////////////////////////////////////////////////////
 
-function StartService(key){
+function StartService(ip,type){
   
 
     $.ajax({
    type: "POST",
    url: '{{ 'start-service/' }}',
-   data: { csrfmiddlewaretoken: '{{ csrf_token }}', data: key },
+   data: { csrfmiddlewaretoken: '{{ csrf_token }}', "type": type },
    success: function callback(){
-               console.log("Start");
+               location.reload();
             }
 });
 }
@@ -265,13 +265,13 @@ function StartService(key){
 //////////////////////////////////////////////////////////////////////////////////////
 
 
-function StopService(key){
+function StopService(ip,type){
   $.ajax({
    type: "POST",
    url: '{{ 'stop-service/' }}',
-   data: { csrfmiddlewaretoken: '{{ csrf_token }}', data: key },
+   data: { csrfmiddlewaretoken: '{{ csrf_token }}', "type": type },
    success: function callback(){
-               console.log("stop")
+               location.reload();
                
             }
 });
