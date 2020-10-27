@@ -1,49 +1,63 @@
+import json
+import os,subprocess
+import collections
 import flask
-import os
+import requests
+from django.core import serializers
 from flask import request, jsonify
+
 app = flask.Flask(__name__)
 app.config["DEBUG"]=False
 
 
+def check_service_status(Type):
+    is_enable=True
+    input_file = open ('../config/json/service_list.json')
+    service_list = json.load(input_file)
+    input_file.close()
+    for service in service_list['rules'][Type]['service']:
+            State=str(subprocess.Popen(["systemctl", "show", "-p", "SubState", "--value", service["name"]],stdout=subprocess.PIPE).communicate())
 
-# @app.route('status',methods=['GET'])
-# def Status(request) 
 
-#############################################################################
+            if "running" in State or "exited" in State:
+                pass
+            else:
+                is_enable=False
 
-@app.route('/start',methods=['POST'])
-def StartService():
+                
+    return is_enable
 
-    try:
-        service=request.json['service_name']
-        # os.system("service "+service+" start")
-        print(request.json['service_list'][1]['name'])
-        return (request.json)
-        
-        
-    except:
-        return("fail")
+
+
+# @app.route('/stop',methods=['POST'])
+# def check_all_service(server_file):
+#     result=collections.defaultdict(dict)
+
+#     input_file = open ('config/json/service_list.json')
+#     json_array = json.load(input_file)
+#     input_file.close()
+
+#     for server in server_file:
+#         status=check_service_status(server,json_array)
+#         result[server.name]['status'] =status
     
-#############################################################################
+#     result=dict(result)
+#     print(result)
 
-@app.route('/stop',methods=['POST'])
-def StopService():
-        service=request.json['service_name']
-        os.system("service "+service+" stop")
-        return("ok")
-        # return HttpResponse(request.POST['data'])
+@app.route('/test',methods=['POST'])
+def test():
+    Type=request.json['type']
+    is_enable=check_service_status(Type)
+    if(is_enable==True):
+        return "enable"
+    else:
+        return "disable"
+        
+        
 
 
-#############################################################################
-
-@app.route('/status',methods=['POST'])
-def GetAllStatus():
-        pass
 
 app.run()
 
 
-    # service=str(request.POST['data'])
-    # service=service.replace(".service","")
-    
-    # return HttpResponse(request.POST['Success'])
+
