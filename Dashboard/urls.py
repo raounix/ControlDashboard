@@ -8,7 +8,7 @@ urlpatterns=[
     path("<slug:slug>",views.MonitoringServer),
     path('start-service/',views.start_service),
     path('stop-service/',views.stop_service),
-
+    path('status-subservice/',views.status_subservice),
     path('add-service/',views.AddServer),
     path('edit-service/',views.EditServer),
     path('deleting-service/',views.DeleteServer),

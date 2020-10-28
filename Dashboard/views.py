@@ -6,7 +6,7 @@ import subprocess
 import sys
 import requests
 from django.core import serializers
-from django.http import HttpResponse
+from django.http import HttpResponse,JsonResponse
 from django.shortcuts import render
 from .models import Server,SSWConfig,SBCConfig,RTPConfig,SSW,SBC,RTP
 
@@ -22,7 +22,7 @@ def MainDashboardPage(request):
     json_array = json.load(input_file)
     input_file.close()
 
-    return render(request,"Dashboard_Templates/dash_base.html",json_array)
+    return render(request,"Dashboard_Templates/dash_base.html",{"all":json_array})
 
 
 
@@ -229,6 +229,36 @@ def stop_service(request):
         return HttpResponse("ok")
     except:
         return HttpResponse("fail")
+
+###################################################################################################
+
+###################################################################################################
+
+
+
+def status_subservice(request):
+    try:
+        if(request.method=='GET'):
+
+            ip=request.GET['ip']
+            Type=request.GET['type']
+            payload = {'ip': ip,'type':Type}
+            response = requests.get('http://'+ip+':5000/status-subservice', params=payload)
+            data=json.loads(response.content)
+            return JsonResponse(data=data)
+        #     request_header={
+        #     'X-HTTP-Method-Override': 'GET' 
+        # }
+        #     response = requests.post(request_uri, request_body, headers=request_header)
+        # Type=request.POST['type']
+        # input_file = open ('config/json/service_list.json')
+        # service_list = json.load(input_file)
+        # input_file.close()
+        # for service in service_list['rules'][Type]['service']:
+        #     os.system("service "+ service['name'] + " stop")
+
+    except:
+            return HttpResponse("fail")
 
 ###################################################################################################
 

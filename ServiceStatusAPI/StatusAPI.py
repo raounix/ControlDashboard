@@ -4,11 +4,15 @@ import collections
 import flask
 import requests
 from django.core import serializers
-from django.http import HttpResponse
+from django.http import HttpResponse,JsonResponse
 from flask import request, jsonify
+
+
+
 
 app = flask.Flask(__name__)
 app.config["DEBUG"]=False
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 
 #########################################################################################
@@ -55,6 +59,14 @@ def CheckStatus():
 
 #########################################################################################
 
+@app.route('/status-subservice',methods=['GET'])
+def subservice_status():
+    print(request.args.get('ip'))
+    response = flask.jsonify({'some': 'data'})
+
+    response.headers.add('Access-Control-Allow-Origin', '*')
+
+    return response
 
       
 # @app.route('/stop',methods=['POST'])

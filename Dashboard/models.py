@@ -5,6 +5,7 @@ from django.db import models
 Type = ( 
     ("ssw", "SSW"), 
     ("sbc","SBC"),
+    ("rtp","RTP")
    
 ) 
 
