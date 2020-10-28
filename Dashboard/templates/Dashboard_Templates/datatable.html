@@ -69,13 +69,12 @@
 			<div id="service_status_modal">
 <!-- Medium modal -->
 					<div class="col-md-4 col-sm-12 mb-30">
-						<div class="pd-20 card-box height-100-p">
 							
 							<div class="modal fade" id="status-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
 								<div class="modal-dialog modal-dialog-centered">
 									<div class="modal-content">
 										<div class="modal-header">
-											<h4 class="modal-title" id="myLargeModalLabel">Medium modal</h4>
+											<h4 class="modal-title" id="myLargeModalLabel">SubService Status</h4>
 											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 										</div>
 										<div class="modal-body" id="status-subservice">
@@ -83,12 +82,11 @@
 										</div>
 										<div class="modal-footer">
 											<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-											<button type="button" class="btn btn-primary">Save changes</button>
+					
 										</div>
 									</div>
 								</div>
 							</div>
-						</div>
 					</div>
 			</div>
 	
@@ -360,9 +358,21 @@ function Service_Status(ip,type){
 	
      jQuery.each(response, function(name, status) {
 		 	if(status=="stop"){
-				$('#status-subservice').append('<div class="row" > <div  id="'+name+'">'+name+'</div><div  style=" position: absolute;left: 50%;color:red;"  >'+"Stopped"+'</div> </div>')
+				 var html ='<div class="row" >'+
+				 ' <div   id="'+name+'">'+name+'</div>'+
+				 '<div  style=" position: absolute;left: 50%;color:red;"  >'+"Stopped"+'</div>'+
+				 '<button style=" position: absolute;left: 80%; type="button" class="btn btn-success" >Start</button>'+
+				 ' </div>'+
+				 '<br>'+'<hr>'
+				$('#status-subservice').append(html)
 			 }else if(status=="start"){
-			$('#status-subservice').append('<div class="row" > <div  id="'+name+'">'+name+'</div><div  style=" position: absolute;left: 50%;;color:green;"  >'+"Running"+'</div> </div>')
+				  var html ='<div class="row" >'+
+				 ' <div  id="'+name+'">'+name+'</div>'+
+				 '<div  style=" position: absolute;left: 50%;color:green;"  >'+"Running"+'</div>'+
+				 '<button style=" position: absolute;left: 80%; type="button" class="btn btn-danger" >Stop</button>'+
+				 ' </div>'+
+				 '<br>'+'<hr>'
+			$('#status-subservice').append(html)
 
 			 }
 		 	
