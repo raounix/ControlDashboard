@@ -8,7 +8,13 @@ import requests
 from django.core import serializers
 from django.http import HttpResponse
 from django.shortcuts import render
-from .models import Server,SSWConfig,SBCConfig,SSW,SBC
+from .models import Server,SSWConfig,SBCConfig,RTPConfig,SSW,SBC,RTP
+
+
+###################################################################################################
+
+###################################################################################################
+
 
 
 def MainDashboardPage(request):
@@ -17,6 +23,12 @@ def MainDashboardPage(request):
     input_file.close()
 
     return render(request,"Dashboard_Templates/dash_base.html",json_array)
+
+
+
+###################################################################################################
+
+###################################################################################################
 
 
 
@@ -41,26 +53,49 @@ def MonitoringServer(request,slug):
         elif(slug=="ssw"):
             status={}
             main=Server.objects.filter(Type="ssw")
-            # input_file = open ('config/json/rules.json')
-            # json_array = json.load(input_file)
-            # input_file.close()
+            input_file = open ('config/json/rules.json')
+            json_array = json.load(input_file)
+            input_file.close()
+      
             
             for server in main:
                 data={'name':server.server_id,'type':server.Type}
                 r=requests.post(url="http://127.0.0.1:5000/check-status",json=data)
                 status[server.name]=r.text
     
-            return render(request,"Dashboard_Templates/datatable.html",{"alldata":main,"type":"ssw",'status':status})
+            return render(request,"Dashboard_Templates/datatable.html",{"alldata":main,"type":"ssw","all":json_array,'status':status})
             
 
         elif(slug=="sbc"):
             status={}
             main=Server.objects.filter(Type="sbc")
+            input_file = open ('config/json/rules.json')
+            json_array = json.load(input_file)
+            input_file.close()
+
+
+
             for server in main:
                 data={'name':server.server_id,'type':server.Type}
                 r=requests.post(url="http://127.0.0.1:5000/check-status",json=data)
                 status[server.name]=r.text
-            return render(request,"Dashboard_Templates/datatable.html",{"alldata":main,"type":"sbc",'status':status})
+            return render(request,"Dashboard_Templates/datatable.html",{"alldata":main,"type":"sbc","all":json_array,'status':status})
+
+
+        elif(slug=="rtp"):
+            status={}
+            main=Server.objects.filter(Type="rtp")
+            input_file = open ('config/json/rules.json')
+            json_array = json.load(input_file)
+            input_file.close()
+
+
+
+            for server in main:
+                data={'name':server.server_id,'type':server.Type}
+                r=requests.post(url="http://127.0.0.1:5000/check-status",json=data)
+                status[server.name]=r.text
+            return render(request,"Dashboard_Templates/datatable.html",{"alldata":main,"type":"rtp","all":json_array,'status':status})
 
 
         else:
@@ -69,6 +104,10 @@ def MonitoringServer(request,slug):
         return HttpResponse("error")
 
 
+
+###################################################################################################
+
+###################################################################################################
 
 
 
@@ -82,26 +121,40 @@ def AddServer(request):
             server_object.save()
             ssw_object=SSW(server_id=server_object)
             ssw_object.save()
-
-
             return HttpResponse("ok")
 
+
         elif(request.POST['type']=="sbc"):
-            
             Type=str(request.POST['type'])
-            
             name=str(request.POST['name'])
             ip=str(request.POST['ip'])
             server_object=Server(name=name,Type=Type,ip=ip)
             server_object.save()
             sbc_object=SBC(server_id=server_object)
             sbc_object.save()
+            return HttpResponse("ok")
+
+
+        elif(request.POST['type']=="rtp"):
+            Type=str(request.POST['type'])
+            name=str(request.POST['name'])
+            ip=str(request.POST['ip'])
+            server_object=Server(name=name,Type=Type,ip=ip)
+            server_object.save()
+            rtp_object=RTP(server_id=server_object)
+            rtp_object.save()
 
 
             return HttpResponse("ok")
         
     except:
         return HttpResponse("error")
+
+
+
+###################################################################################################
+
+###################################################################################################
 
 
 
@@ -120,6 +173,12 @@ def EditServer(request):
     except:
         return HttpResponse("error")
 
+###################################################################################################
+
+###################################################################################################
+
+
+
 
 
 def DeleteServer(request):
@@ -130,6 +189,12 @@ def DeleteServer(request):
         return HttpResponse("ok")
     except:
         return HttpResponse("error")
+
+
+###################################################################################################
+
+###################################################################################################
+
 
 
 def start_service(request):
@@ -143,6 +208,12 @@ def start_service(request):
         return HttpResponse("ok")
     except:
         return HttpResponse("fail")
+
+###################################################################################################
+
+###################################################################################################
+
+
 
 
 
@@ -158,6 +229,12 @@ def stop_service(request):
         return HttpResponse("ok")
     except:
         return HttpResponse("fail")
+
+###################################################################################################
+
+###################################################################################################
+
+
 
 
 

@@ -19,6 +19,16 @@
                     "name": "ssh"
                 }
             ]
+        },
+        "rtp": {
+            "service": [{
+
+                    "name": "nginx"
+                },
+                {
+                    "name": "ssh"
+                }
+            ]
         }
 
 

@@ -242,8 +242,8 @@
 					</li>
 					{% for rules_type in all.rules %}
 					<li>
-						<a href="{{ rules_type.name }}" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-worldwide"></span><span class="mtext">{{ rules_type.name }}</span>
+						<a href="{{ rules_type.name |lower }}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-worldwide"></span><span class="mtext">{{ rules_type.name|upper }}</span>
 						</a>
 					</li>
 					

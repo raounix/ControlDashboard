@@ -65,36 +65,7 @@
 
 
 			</div>
-		<div class="pd-ltr-20 xs-pd-20-10">
-			<div class="min-height-200px">
-				<div class="page-header">
-					<div class="row">
-						<div class="col-md-6 col-sm-12">
-							<div class="title">
-								<h4>DataTable</h4>
-							</div>
-							<nav aria-label="breadcrumb" role="navigation">
-								<ol class="breadcrumb">
-									<li class="breadcrumb-item"><a href="index.html">Home</a></li>
-									<li class="breadcrumb-item active" aria-current="page">DataTable</li>
-								</ol>
-							</nav>
-						</div>
-						
-						<div class="col-md-6 col-sm-12 text-right">
-							<div class="dropdown">
-								<a class="btn btn-primary dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-									January 2018
-								</a>
-								<div class="dropdown-menu dropdown-menu-right">
-									<a class="dropdown-item" href="#">Export List</a>
-									<a class="dropdown-item" href="#">Policies</a>
-									<a class="dropdown-item" href="#">View Assets</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
+	
 				{% if type != "all" %}
 			<div class="row">
 							<div class="col-md-5 col-sm-12">
@@ -136,12 +107,14 @@
 							
 								<tr>
 									<th >ID</th>
-									<th >Service Name</th>
+									<th >Description</th>
 									<th>Type</th>
 									<th >IP</th>
 									<th >Status</td>
 									<th>Actions</th>
 									<th>Start/Stop</td> 
+									<th>Details</td>
+
 								</tr>
 							</thead>
 							<tbody>
@@ -156,17 +129,17 @@
 									<td>{{data.Type | upper }}</td>
 									<td>{{ data.ip }}</td>
 									{% if value == 'disable' %}
-									<th data-color="#f56767" >{{value}}</td>
+									<th data-color="#f56767" >Stopped</td>
 									{% elif value == 'enable' %}
-									<th data-color="#33cc33" >{{value}}</td>
+									<th data-color="#33cc33" >Running</td>
 									{% endif %}
 									<td>
 									<div class="row">
 										<div style="padding-right:10px">					
-												<a  onclick="Put_Value('{{data.server_id}}','{{data.name}}','{{data.ip}}')"   href="#"  data-backdrop="static" data-toggle="modal" data-target="#edit-modal" type="button" ><i class="dw dw-edit2" ></i> Edit</a>
+												<a  onclick="Put_Value('{{data.server_id}}','{{data.name}}','{{data.ip}}')"   href="#"  data-backdrop="static" data-toggle="modal" data-target="#edit-modal" type="button" ><i class="dw dw-edit2" ></i> </a>
 										</div>
 										<div style="padding-right:10px">
-												<a  onclick="PutDeleteValue('{{data.server_id}}')"  href="#" data-color="#f56767" data-toggle="modal" data-target="#warning-modal" ><i class="dw dw-delete-3" ></i> Delete</a>
+												<a  onclick="PutDeleteValue('{{data.server_id}}')"  href="#" data-color="#f56767" data-toggle="modal" data-target="#warning-modal" ><i class="dw dw-delete-3" ></i> </a>
 										</div>
 									
 										</div>
@@ -179,6 +152,7 @@
 									<a   onclick="StopService('{{data.ip}}','{{data.Type}}')" href="#"    type="button" data-color="#f56767"><i class="dw dw-stop"   ></i> Stop</a>
 									{% endif %}
 									</td>
+									<td> <a> Test </a></td>
 								
 								</tr>
 								{% endif %}

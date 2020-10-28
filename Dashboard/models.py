@@ -26,13 +26,16 @@ class SBCConfig(models.Model):
     def __str__(self):
         return str("config id " + str(self.config_id))
     
-     
-    
-    
     
 class SSWConfig(models.Model):
     config_id=models.AutoField(primary_key=True,unique=True,null=False)
     config=models.FileField(upload_to='Dashboard/static/config_files/SSW',null=True)
+    def __str__(self):
+        return str("config id " + str(self.config_id))
+    
+class RTPConfig(models.Model):
+    config_id=models.AutoField(primary_key=True,unique=True,null=False)
+    config=models.FileField(upload_to='Dashboard/static/config_files/RTP',null=True)
     def __str__(self):
         return str("config id " + str(self.config_id))
     
@@ -48,7 +51,6 @@ class SSW(models.Model):
         return str( "server id :"+ (str(self.server_id.server_id)))
 
 
-
 class SBC(models.Model):
     sbc_id = models.AutoField(primary_key=True,unique=True,null=False)
     server_id=models.OneToOneField(Server,on_delete=models.CASCADE)
@@ -56,6 +58,15 @@ class SBC(models.Model):
     
     def __str__(self):
         return str( "server id :"+ (str(self.server_id.server_id)))
+
+class RTP(models.Model):
+    rtp_id = models.AutoField(primary_key=True,unique=True,null=False)
+    server_id=models.OneToOneField(Server,on_delete=models.CASCADE)
+    # config=models.OneToOneField(SBCConfig,on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return str( "server id :"+ (str(self.server_id.server_id)))
+
 
 
 
