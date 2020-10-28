@@ -242,20 +242,11 @@ def status_subservice(request):
 
             ip=request.GET['ip']
             Type=request.GET['type']
-            payload = {'ip': ip,'type':Type}
+            payload = {'type':Type}
             response = requests.get('http://'+ip+':5000/status-subservice', params=payload)
             data=json.loads(response.content)
             return JsonResponse(data=data)
-        #     request_header={
-        #     'X-HTTP-Method-Override': 'GET' 
-        # }
-        #     response = requests.post(request_uri, request_body, headers=request_header)
-        # Type=request.POST['type']
-        # input_file = open ('config/json/service_list.json')
-        # service_list = json.load(input_file)
-        # input_file.close()
-        # for service in service_list['rules'][Type]['service']:
-        #     os.system("service "+ service['name'] + " stop")
+      
 
     except:
             return HttpResponse("fail")

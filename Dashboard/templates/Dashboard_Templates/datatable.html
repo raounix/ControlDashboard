@@ -78,8 +78,8 @@
 											<h4 class="modal-title" id="myLargeModalLabel">Medium modal</h4>
 											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 										</div>
-										<div class="modal-body">
-											<p id="test"></p>
+										<div class="modal-body" id="status-subservice">
+											
 										</div>
 										<div class="modal-footer">
 											<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -356,7 +356,22 @@ function Service_Status(ip,type){
 
   },
   success: function(response) {
-    
+	$('#status-subservice').text('')
+	
+     jQuery.each(response, function(name, status) {
+		 	if(status=="stop"){
+				$('#status-subservice').append('<div class="row" > <div  id="'+name+'">'+name+'</div><div  style=" position: absolute;left: 50%;color:red;"  >'+"Stopped"+'</div> </div>')
+			 }else if(status=="start"){
+			$('#status-subservice').append('<div class="row" > <div  id="'+name+'">'+name+'</div><div  style=" position: absolute;left: 50%;;color:green;"  >'+"Running"+'</div> </div>')
+
+			 }
+		 	
+			
+
+		
+
+        });
+	
   },
   error: function(xhr) {
     console.log("Fail")

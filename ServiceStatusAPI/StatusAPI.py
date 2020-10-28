@@ -34,6 +34,27 @@ def check_service_status(Type):
                 
     return is_enable
 
+#########################################################################################
+
+#########################################################################################
+
+
+def check_subservice_status(Type):
+    data={}
+    input_file = open ('../config/json/service_list.json')
+    service_list = json.load(input_file)
+    input_file.close()
+    for service in service_list['rules'][Type]['service']:
+            State=str(subprocess.Popen(["systemctl", "show", "-p", "SubState", "--value", service["name"]],stdout=subprocess.PIPE).communicate())
+
+
+            if "running" in State or "exited" in State:
+                data[service["name"]]="start"
+            else:
+                data[service["name"]]="stop"
+
+                
+    return data
 
 
                 
@@ -61,8 +82,9 @@ def CheckStatus():
 
 @app.route('/status-subservice',methods=['GET'])
 def subservice_status():
-    print(request.args.get('ip'))
-    response = flask.jsonify({'some': 'data'})
+    Type=request.args.get('type')
+    data=check_subservice_status(Type)
+    response = flask.jsonify(data)
 
     response.headers.add('Access-Control-Allow-Origin', '*')
 
