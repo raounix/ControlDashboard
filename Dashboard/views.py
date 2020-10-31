@@ -78,13 +78,16 @@ def MonitoringServer(request,slug):
                 json_array = json.load(input_file)
                 input_file.close()
                 status={}
-                for server in main:
-                    data={'name':server.server_id,'type':server.Type}
-                    r=requests.post(url="http://127.0.0.1:5000/check-status",json=data)
-                    status[server.name]=r.text
+                try:
+                    for server in main:
+                        data={'name':server.server_id,'type':server.Type}
+                        r=requests.post(url="http://"+server.ip+":5000/check-status",json=data)
+                        status[server.name]=r.text
             
-            
-                return render(request,"Dashboard_Templates/datatable.html",{"alldata":main,"type":"all","all":json_array,'status':status})
+                
+                    return render(request,"Dashboard_Templates/datatable.html",{"alldata":main,"type":"all","all":json_array,'status':status})
+                except:
+                    return render(request,"Dashboard_Templates/datatable.html",{"alldata":'',"type":"all","all":json_array,'status':''})
 
 
             elif(slug=="ssw"):
@@ -94,13 +97,15 @@ def MonitoringServer(request,slug):
                 json_array = json.load(input_file)
                 input_file.close()
       
-            
-                for server in main:
-                    data={'name':server.server_id,'type':server.Type}
-                    r=requests.post(url="http://127.0.0.1:5000/check-status",json=data)
-                    status[server.name]=r.text
-    
-                return render(request,"Dashboard_Templates/datatable.html",{"alldata":main,"type":"ssw","all":json_array,'status':status})
+                try:
+                    for server in main:
+                        data={'name':server.server_id,'type':server.Type}
+                        r=requests.post(url="http://"+server.ip+":5000/check-status",json=data)
+                        status[server.name]=r.text
+        
+                    return render(request,"Dashboard_Templates/datatable.html",{"alldata":main,"type":"ssw","all":json_array,'status':status})
+                except:
+                    return render(request,"Dashboard_Templates/datatable.html",{"alldata":'',"type":"ssw","all":json_array,'status':''})
             
 
             elif(slug=="sbc"):
@@ -111,13 +116,15 @@ def MonitoringServer(request,slug):
                 input_file.close()
 
 
-
-                for server in main:
-                    data={'name':server.server_id,'type':server.Type}
-                    r=requests.post(url="http://127.0.0.1:5000/check-status",json=data)
-                    status[server.name]=r.text
-                return render(request,"Dashboard_Templates/datatable.html",{"alldata":main,"type":"sbc","all":json_array,'status':status})
-
+                try:
+                    for server in main:
+                        data={'name':server.server_id,'type':server.Type}
+                        r=requests.post(url="http://"+server.ip+":5000/check-status",json=data)
+                        status[server.name]=r.text
+                    return render(request,"Dashboard_Templates/datatable.html",{"alldata":main,"type":"sbc","all":json_array,'status':status})
+                except:
+                    return render(request,"Dashboard_Templates/datatable.html",{"alldata":'',"type":"sbc","all":json_array,'status':''})
+                
 
             elif(slug=="rtp"):
                 status={}
@@ -127,14 +134,16 @@ def MonitoringServer(request,slug):
                 input_file.close()
 
 
+                try:
+                    for server in main:
+                        data={'name':server.server_id,'type':server.Type}
+                        r=requests.post(url="http://"+server.ip+":5000/check-status",json=data)
+                        status[server.name]=r.text
+                    return render(request,"Dashboard_Templates/datatable.html",{"alldata":main,"type":"rtp","all":json_array,'status':status})
+                except:
+                    return render(request,"Dashboard_Templates/datatable.html",{"alldata":'',"type":"rtp","all":json_array,'status':''})
 
-                for server in main:
-                    data={'name':server.server_id,'type':server.Type}
-                    r=requests.post(url="http://127.0.0.1:5000/check-status",json=data)
-                    status[server.name]=r.text
-                return render(request,"Dashboard_Templates/datatable.html",{"alldata":main,"type":"rtp","all":json_array,'status':status})
-
-
+            
             else:
                 return render(request,"Dashboard_Templates/404.html")
         except:
