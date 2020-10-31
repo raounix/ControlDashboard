@@ -14,6 +14,8 @@ urlpatterns=[
     path('deleting-service/',views.DeleteServer),
     path('start-subservice/',views.start_subservice),
     path('stop-subservice/',views.stop_subservice),
+    path('login/',views.Login),
+    path('logout/',views.Logout)
 
 ]
 
