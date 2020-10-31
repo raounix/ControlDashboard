@@ -109,6 +109,7 @@ def MonitoringServer(request,slug):
 
 ###################################################################################################
 
+## Edit Server Info
 
 
 def AddServer(request):
@@ -191,20 +192,25 @@ def DeleteServer(request):
         return HttpResponse("error")
 
 
+
+
+
+###################################################################################################
+## END OF Edit Server Info
 ###################################################################################################
 
-###################################################################################################
+## Get Info From Server
 
 
 
-def start_service(request):
+def start_server_service(request):
     try:
         Type=request.POST['type']
-        input_file = open ('config/json/service_list.json')
-        service_list = json.load(input_file)
-        input_file.close()
-        for service in service_list['rules'][Type]['service']:
-            os.system("service "+ service['name'] + " start")
+        ip=request.POST['ip']
+        payload={'type':Type}
+        response = requests.post('http://'+ip+':5000/start-server',json=payload)
+
+
         return HttpResponse("ok")
     except:
         return HttpResponse("fail")
@@ -218,14 +224,32 @@ def start_service(request):
 
 
 
-def stop_service(request):
+def stop_server_service(request):
     try:
         Type=request.POST['type']
-        input_file = open ('config/json/service_list.json')
-        service_list = json.load(input_file)
-        input_file.close()
-        for service in service_list['rules'][Type]['service']:
-            os.system("service "+ service['name'] + " stop")
+        ip=request.POST['ip']
+        payload={'type':Type}
+        response = requests.post('http://'+ip+':5000/stop-server',json=payload)
+
+
+        return HttpResponse("ok")
+    except:
+        return HttpResponse("fail")
+###################################################################################################
+
+###################################################################################################
+
+
+
+
+def start_subservice(request):
+    try:
+        SubServiceName=request.POST['subservice']
+        ip=request.POST['ip']
+        payload={'subservice':SubServiceName}
+        response = requests.post('http://'+ip+':5000/start-subservice',json=payload)
+
+
         return HttpResponse("ok")
     except:
         return HttpResponse("fail")
@@ -234,6 +258,26 @@ def stop_service(request):
 
 ###################################################################################################
 
+
+
+
+
+
+def stop_subservice(request):
+    try:
+        SubServiceName=request.POST['subservice']
+        ip=request.POST['ip']
+        payload={'subservice':SubServiceName}
+        response = requests.post('http://'+ip+':5000/stop-subservice',json=payload)
+
+
+        return HttpResponse("ok")
+    except:
+        return HttpResponse("fail")
+
+###################################################################################################
+
+###################################################################################################
 
 
 def status_subservice(request):
@@ -251,13 +295,8 @@ def status_subservice(request):
     except:
             return HttpResponse("fail")
 
+
+
 ###################################################################################################
-
+## END OF  Get Info From Server
 ###################################################################################################
-
-
-
-
-
-
-

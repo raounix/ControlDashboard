@@ -87,6 +87,7 @@
 									</div>
 								</div>
 							</div>
+
 					</div>
 			</div>
 	
@@ -257,7 +258,7 @@ function StartService(ip,type){
     $.ajax({
    type: "POST",
    url: '{{ 'start-service/' }}',
-   data: { csrfmiddlewaretoken: '{{ csrf_token }}', "type": type },
+   data: { csrfmiddlewaretoken: '{{ csrf_token }}', "type": type,"ip":ip },
    success: function callback(){
                location.reload();
             }
@@ -271,7 +272,38 @@ function StopService(ip,type){
   $.ajax({
    type: "POST",
    url: '{{ 'stop-service/' }}',
-   data: { csrfmiddlewaretoken: '{{ csrf_token }}', "type": type },
+   data: { csrfmiddlewaretoken: '{{ csrf_token }}', "type": type,"ip":ip },
+   success: function callback(){
+               location.reload();
+               
+            }
+});
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////
+
+function startsubservice(subservice,ip){
+  
+
+    $.ajax({
+   type: "POST",
+   url: '{{ 'start-subservice/' }}',
+   data: { csrfmiddlewaretoken: '{{ csrf_token }}', "subservice": subservice,"ip":ip },
+   success: function callback(){
+               location.reload();
+            }
+});
+}
+
+//////////////////////////////////////////////////////////////////////////////////////
+
+
+function stopsubservice(subservice,ip){
+  $.ajax({
+   type: "POST",
+   url: '{{ 'stop-subservice/' }}',
+   data: { csrfmiddlewaretoken: '{{ csrf_token }}', "subservice": subservice,"ip":ip },
    success: function callback(){
                location.reload();
                
@@ -281,6 +313,8 @@ function StopService(ip,type){
 
 
 
+
+//////////////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////////////
 
@@ -361,7 +395,7 @@ function Service_Status(ip,type){
 				 var html ='<div class="row" >'+
 				 ' <div   id="'+name+'">'+name+'</div>'+
 				 '<div  style=" position: absolute;left: 50%;color:red;"  >'+"Stopped"+'</div>'+
-				 '<button style=" position: absolute;left: 80%; type="button" class="btn btn-success" >Start</button>'+
+				 '<button onclick="startsubservice(\''+name+'\',\''+ip+'\')" style=" position: absolute;left: 80%; type="button" class="btn btn-success" >Start</button>'+
 				 ' </div>'+
 				 '<br>'+'<hr>'
 				$('#status-subservice').append(html)
@@ -369,7 +403,7 @@ function Service_Status(ip,type){
 				  var html ='<div class="row" >'+
 				 ' <div  id="'+name+'">'+name+'</div>'+
 				 '<div  style=" position: absolute;left: 50%;color:green;"  >'+"Running"+'</div>'+
-				 '<button style=" position: absolute;left: 80%; type="button" class="btn btn-danger" >Stop</button>'+
+				 '<button onclick="stopsubservice(\''+name+'\',\''+ip+'\')" style=" position: absolute;left: 80%; type="button" class="btn btn-danger" >Stop</button>'+
 				 ' </div>'+
 				 '<br>'+'<hr>'
 			$('#status-subservice').append(html)
@@ -387,7 +421,6 @@ function Service_Status(ip,type){
     console.log("Fail")
   }
 });
-$('#test').text(ip)
 
 
 
