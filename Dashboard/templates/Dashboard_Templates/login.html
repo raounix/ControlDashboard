@@ -86,17 +86,7 @@
 						</div>
 						<form action="/login/" method="post">
 						{% csrf_token %}
-							<div class="select-role">
-								<div class="btn-group btn-group-toggle" data-toggle="buttons">
-									<label class="btn active">
-										<input type="radio" name="options" id="admin">
-										<div class="icon"><img src="{% static 'vendors/images/briefcase.svg' %}" class="svg" alt=""></div>
-										<span>I'm</span>
-										Manager
-									</label>
-					
-								</div>
-							</div>
+						
 							<div class="input-group custom">
 								<input type="text" class="form-control form-control-lg" placeholder="Username" id="username" name="username">
 								<div class="input-group-append custom">
