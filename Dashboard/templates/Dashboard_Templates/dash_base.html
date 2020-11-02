@@ -127,23 +127,25 @@
 					</div>
 				</div>
 			</div>
+			{% if user.is_authenticated %}
 			<div class="user-info-dropdown">
 				<div class="dropdown">
 					<a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
 						<span class="user-icon">
 							<img src="{% static 'vendors/images/profile.jpg'%}" alt="">
 						</span>
-						<span class="user-name">Raouf Baghejary</span>
+						<span class="user-name">{{user.get_username }}</span>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
 						<a class="dropdown-item" href="profile.html"><i class="dw dw-user1"></i> Profile</a>
 						<a class="dropdown-item" href="profile.html"><i class="dw dw-settings2"></i> Setting</a>
 						<a class="dropdown-item" href="faq.html"><i class="dw dw-help"></i> Help</a>
-						<a class="dropdown-item" href="login.html"><i class="dw dw-logout"></i> Log Out</a>
+						<a  class="dropdown-item" href="/logout/"><i class="dw dw-logout"></i> Log Out</a>
 					</div>
 				</div>
 			</div>
 			
+			{% endif %}
 		</div>
 	</div>
 
@@ -242,8 +244,8 @@
 					</li>
 					{% for rules_type in all.rules %}
 					<li>
-						<a href="{{ rules_type.name }}" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-worldwide"></span><span class="mtext">{{ rules_type.name }}</span>
+						<a href="{{ rules_type.name |lower }}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-worldwide"></span><span class="mtext">{{ rules_type.name|upper }}</span>
 						</a>
 					</li>
 					

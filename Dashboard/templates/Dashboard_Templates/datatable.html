@@ -65,36 +65,32 @@
 
 
 			</div>
-		<div class="pd-ltr-20 xs-pd-20-10">
-			<div class="min-height-200px">
-				<div class="page-header">
-					<div class="row">
-						<div class="col-md-6 col-sm-12">
-							<div class="title">
-								<h4>DataTable</h4>
-							</div>
-							<nav aria-label="breadcrumb" role="navigation">
-								<ol class="breadcrumb">
-									<li class="breadcrumb-item"><a href="index.html">Home</a></li>
-									<li class="breadcrumb-item active" aria-current="page">DataTable</li>
-								</ol>
-							</nav>
-						</div>
-						
-						<div class="col-md-6 col-sm-12 text-right">
-							<div class="dropdown">
-								<a class="btn btn-primary dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-									January 2018
-								</a>
-								<div class="dropdown-menu dropdown-menu-right">
-									<a class="dropdown-item" href="#">Export List</a>
-									<a class="dropdown-item" href="#">Policies</a>
-									<a class="dropdown-item" href="#">View Assets</a>
+
+			<div id="service_status_modal">
+<!-- Medium modal -->
+					<div class="col-md-4 col-sm-12 mb-30">
+							
+							<div class="modal fade" id="status-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+								<div class="modal-dialog modal-dialog-centered">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h4 class="modal-title" id="myLargeModalLabel">SubService Status</h4>
+											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+										</div>
+										<div class="modal-body" id="status-subservice">
+											
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					
+										</div>
+									</div>
 								</div>
 							</div>
-						</div>
+
 					</div>
-				</div>
+			</div>
+	
 				{% if type != "all" %}
 			<div class="row">
 							<div class="col-md-5 col-sm-12">
@@ -126,6 +122,7 @@
 							
 			</div>
 				{% endif %}
+				
 				<!-- Simple Datatable start -->
 				<div class="card-box mb-30">
 					
@@ -134,32 +131,62 @@
 							<thead>
 							
 								<tr>
-									<th class="datatable-nosort">ID</th>
-									<th >Service Name</th>
+									<th >ID</th>
+									<th >Description</th>
 									<th>Type</th>
-									<th>IP</th>
-									
-									<th class="datatable-nosort">Action(Edit)</th>
-									<th class="datatable-nosort">Action(Delete)</th>
+									<th >IP</th>
+									<th >Status</td>
+									<th>Actions</th>
+									<th>Start/Stop</td> 
+									<th>Details</td>
+
 								</tr>
 							</thead>
 							<tbody>
+							
 							{% for data in alldata %}
+							{% for key,value in status.items %}
+							
+							{% if data.name == key %}
 								<tr>
 									<td class="table-plus">{{ data.server_id }}</td>
 									<td>{{ data.name }}</td>
 									<td>{{data.Type | upper }}</td>
 									<td>{{ data.ip }}</td>
+									{% if value == 'disable' %}
+									<th data-color="#f56767" >Stopped</td>
+									{% elif value == 'enable' %}
+									<th data-color="#33cc33" >Running</td>
+									{% endif %}
+									<td>
+									<div class="row">
+										<div style="padding-right:10px">					
+												<a  onclick="Put_Value('{{data.server_id}}','{{data.name}}','{{data.ip}}')"   href="#"  data-backdrop="static" data-toggle="modal" data-target="#edit-modal" type="button" ><i class="dw dw-edit2" ></i> </a>
+										</div>
+										<div style="padding-right:10px">
+												<a  onclick="PutDeleteValue('{{data.server_id}}')"  href="#" data-color="#f56767" data-toggle="modal" data-target="#warning-modal" ><i class="dw dw-delete-3" ></i> </a>
+										</div>
 									
-									<td>
-																					
-												<a  onclick="Put_Value('{{data.server_id}}','{{data.name}}','{{data.ip}}')"   href="#"  data-backdrop="static" data-toggle="modal" data-target="#edit-modal" type="button" ><i class="dw dw-edit2" ></i> Edit</a>
+										</div>
 									</td>
 									<td>
-												<a  onclick="PutDeleteValue('{{data.server_id}}')"  href="#" data-color="#f56767" data-toggle="modal" data-target="#warning-modal" ><i class="dw dw-delete-3" ></i> Delete</a>
+									{% if value == 'disable' %}
+									<a  onclick="StartService('{{data.ip}}','{{data.Type}}')"  href="#"    type="button" data-color="#33cc33"><i class="dw dw-right-arrow-4"  ></i> Start</a>
 
+									{% elif value == 'enable' %}
+									<a   onclick="StopService('{{data.ip}}','{{data.Type}}')" href="#"    type="button" data-color="#f56767"><i class="dw dw-stop"   ></i> Stop</a>
+									{% endif %}
 									</td>
+									<td> 
+									<a onclick="Service_Status('{{data.ip}}','{{data.Type}}')" href="#" class="btn-block" data-toggle="modal" data-target="#status-modal" type="button">
+											Details
+									</a>
+									</td>
+								
 								</tr>
+								{% endif %}
+								{% endfor %}
+
 								{% endfor %}
 							</tbody>
 						</table>
@@ -225,15 +252,15 @@ function AddService(service_type){
 
 //////////////////////////////////////////////////////////////////////////////////////
 
-function StartService(key){
+function StartService(ip,type){
   
 
     $.ajax({
    type: "POST",
    url: '{{ 'start-service/' }}',
-   data: { csrfmiddlewaretoken: '{{ csrf_token }}', data: key },
+   data: { csrfmiddlewaretoken: '{{ csrf_token }}', "type": type,"ip":ip },
    success: function callback(){
-               console.log("Start");
+               location.reload();
             }
 });
 }
@@ -241,13 +268,44 @@ function StartService(key){
 //////////////////////////////////////////////////////////////////////////////////////
 
 
-function StopService(key){
+function StopService(ip,type){
   $.ajax({
    type: "POST",
    url: '{{ 'stop-service/' }}',
-   data: { csrfmiddlewaretoken: '{{ csrf_token }}', data: key },
+   data: { csrfmiddlewaretoken: '{{ csrf_token }}', "type": type,"ip":ip },
    success: function callback(){
-               console.log("stop")
+               location.reload();
+               
+            }
+});
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////
+
+function startsubservice(subservice,ip){
+  
+
+    $.ajax({
+   type: "POST",
+   url: '{{ 'start-subservice/' }}',
+   data: { csrfmiddlewaretoken: '{{ csrf_token }}', "subservice": subservice,"ip":ip },
+   success: function callback(){
+               location.reload();
+            }
+});
+}
+
+//////////////////////////////////////////////////////////////////////////////////////
+
+
+function stopsubservice(subservice,ip){
+  $.ajax({
+   type: "POST",
+   url: '{{ 'stop-subservice/' }}',
+   data: { csrfmiddlewaretoken: '{{ csrf_token }}', "subservice": subservice,"ip":ip },
+   success: function callback(){
+               location.reload();
                
             }
 });
@@ -255,6 +313,8 @@ function StopService(key){
 
 
 
+
+//////////////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////////////
 
@@ -311,6 +371,59 @@ function DeleteService(){
                
             }
 });
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////
+
+function Service_Status(ip,type){
+
+
+ $.ajax({
+  url:'{{ 'status-subservice/' }}',
+  type: "get", //send it through get method
+  data: { 
+    "ip": ip, 
+    "type": type, 
+
+  },
+  success: function(response) {
+	$('#status-subservice').text('')
+	
+     jQuery.each(response, function(name, status) {
+		 	if(status=="stop"){
+				 var html ='<div class="row" >'+
+				 ' <div   id="'+name+'">'+name+'</div>'+
+				 '<div  style=" position: absolute;left: 50%;color:red;"  >'+"Stopped"+'</div>'+
+				 '<button onclick="startsubservice(\''+name+'\',\''+ip+'\')" style=" position: absolute;left: 80%; type="button" class="btn btn-success" >Start</button>'+
+				 ' </div>'+
+				 '<br>'+'<hr>'
+				$('#status-subservice').append(html)
+			 }else if(status=="start"){
+				  var html ='<div class="row" >'+
+				 ' <div  id="'+name+'">'+name+'</div>'+
+				 '<div  style=" position: absolute;left: 50%;color:green;"  >'+"Running"+'</div>'+
+				 '<button onclick="stopsubservice(\''+name+'\',\''+ip+'\')" style=" position: absolute;left: 80%; type="button" class="btn btn-danger" >Stop</button>'+
+				 ' </div>'+
+				 '<br>'+'<hr>'
+			$('#status-subservice').append(html)
+
+			 }
+		 	
+			
+
+		
+
+        });
+	
+  },
+  error: function(xhr) {
+    console.log("Fail")
+  }
+});
+
+
+
 }
 
 
