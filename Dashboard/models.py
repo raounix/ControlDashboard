@@ -29,8 +29,8 @@ class SBCConfig(models.Model):
     
     
 class SSWConfig(models.Model):
-    config_id=models.AutoField(primary_key=True,unique=True,null=False)
-    config=models.FileField(upload_to='Dashboard/static/config_files/SSW',null=True)
+    config_id=models.AutoField(primary_key=True,unique=True)
+    config=models.FileField(upload_to='Dashboard/static/config_files/SSW',blank=True)
     def __str__(self):
         return str("config id " + str(self.config_id))
     
@@ -46,7 +46,7 @@ class RTPConfig(models.Model):
 class SSW(models.Model):
     ssw_id = models.AutoField(primary_key=True,unique=True,null=False)
     server_id=models.OneToOneField(Server,on_delete=models.CASCADE)
-    # config=models.OneToOneField(SSWConfig,on_delete=models.CASCADE)
+    config=models.OneToOneField(SSWConfig,on_delete=models.CASCADE)
     
     def __str__(self):
         return str( "server id :"+ (str(self.server_id.server_id)))
