@@ -37,12 +37,54 @@
 										
 									</div>
 								</div>
-							</div>
+	</div>
 
 
 							
 </div>
 
+ <div id="config-modal">
+ 	<div class="modal fade" id="configmodal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+								<div class="modal-dialog modal-dialog-centered">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h4 class="modal-title" id="myLargeModalLabel">Upload Config</h4>
+											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+										</div>
+										</br>
+
+										<button onclick="AddNewColumn()" type="button" class="close"  aria-hidden="true">Add New Column</button>
+										</br></br>
+										<form >
+										<div id="test">
+												<div class="row">
+													<div class="col-md-6 col-sm-12">
+														<div class="form-group">
+															
+															<input type="text" class="form-control" placeholder="Name">
+														</div>
+													</div>
+													<div class="col-md-6 col-sm-12">
+														<div class="form-group">
+															<input type="text" class="form-control" placeholder="Value">
+														</div>
+													</div>
+												
+												</div>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+											<button type="button" class="btn btn-primary" onclick="Submit_Edit()">Save changes</button>
+										</div>
+										</form>
+
+									</div>
+								</div>
+	</div>
+
+
+							
+</div>
 
 
 			<div id="delete-modal">
@@ -90,7 +132,8 @@
 
 					</div>
 			</div>
-	
+			<a    data-backdrop="static" data-toggle="modal" data-target="#configmodal" type="button" ><i class="dw dw-edit2" ></i> </a>
+
 				{% if type != "all" %}
 			<div class="row">
 							<div class="col-md-5 col-sm-12">
@@ -427,8 +470,29 @@ function Service_Status(ip,type){
 }
 
 
+
 //////////////////////////////////////////////////////////////////////////////////////
 
+</script>
+
+<script>
+function AddNewColumn(){
+	var html=`<div class="row">
+													<div class="col-md-6 col-sm-12">
+														<div class="form-group">
+															
+															<input type="text" class="form-control" placeholder="Name">
+														</div>
+													</div>
+													<div class="col-md-6 col-sm-12">
+														<div class="form-group">
+															<input type="text" class="form-control" placeholder="Value">
+														</div>
+													</div>
+												
+												</div>`
+$( "#test" ).append( html );
+}
 </script>
 
 	{% endblock %}
