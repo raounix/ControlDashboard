@@ -10,7 +10,7 @@ from django.http import HttpResponse,JsonResponse
 from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate, login,logout
 from django.forms.models import model_to_dict
-from .models import Server,SSWConfig,SBCConfig,RTPConfig,SSW,SBC,RTP
+from .models import Server,SSW_SIPProfile,SBCConfig,RTPConfig,SSW,SBC,RTP
 
 
 ###################################################################################################
