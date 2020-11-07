@@ -7,6 +7,7 @@
  <input type="hidden" id="hid_name" value="" />
 <input type="hidden" id="hid_ip" value="" />
 <input type="hidden" id="delete_ip" value="" />
+<input type="hidden" id="counter" value="0" />
 
 
  <div id="modals">
@@ -58,17 +59,7 @@
 										<form >
 										<div id="test">
 												<div class="row">
-													<div class="col-md-6 col-sm-12">
-														<div class="form-group">
-															
-															<input type="text" class="form-control" placeholder="Name">
-														</div>
-													</div>
-													<div class="col-md-6 col-sm-12">
-														<div class="form-group">
-															<input type="text" class="form-control" placeholder="Value">
-														</div>
-													</div>
+												
 												
 												</div>
 										</div>
@@ -132,7 +123,6 @@
 
 					</div>
 			</div>
-			<a    data-backdrop="static" data-toggle="modal" data-target="#configmodal" type="button" ><i class="dw dw-edit2" ></i> </a>
 
 				{% if type != "all" %}
 			<div class="row">
@@ -182,6 +172,10 @@
 									<th>Actions</th>
 									<th>Start/Stop</td> 
 									<th>Details</td>
+									{% if type == "ssw" %}
+
+									<th>Config</th>
+									{% endif %}
 
 								</tr>
 							</thead>
@@ -225,6 +219,11 @@
 											Details
 									</a>
 									</td>
+									{% if type == "ssw" %}
+									<td>
+										<a    data-backdrop="static" data-toggle="modal" data-target="#configmodal" type="button" ><i class="dw dw-settings" ></i> </a>
+									</td>
+									{% endif %}
 								
 								</tr>
 								{% endif %}
@@ -476,23 +475,51 @@ function Service_Status(ip,type){
 </script>
 
 <script>
+
+function Counter(value){
+
+}
+
+
 function AddNewColumn(){
-	var html=`<div class="row">
+	var counter = new Promise((resolve, reject) => {
+		var counter = parseInt(document.getElementById("counter").getAttribute("value"))
+		counter+=1
+		
+		resolve(counter)
+
+	});
+
+	counter.then((value)=>{
+		
+	
+		var html=`<div class="row">
 													<div class="col-md-6 col-sm-12">
 														<div class="form-group">
 															
-															<input type="text" class="form-control" placeholder="Name">
+															<input type="text" class="form-control" placeholder="Name" name="name_`+value+` " id="name_`+value+`">
 														</div>
 													</div>
 													<div class="col-md-6 col-sm-12">
 														<div class="form-group">
-															<input type="text" class="form-control" placeholder="Value">
+															<input type="text" class="form-control" placeholder="Value" name="value_`+value+` " id="value_`+value+`">
 														</div>
 													</div>
 												
 												</div>`
-$( "#test" ).append( html );
+		$( "#test" ).append( html );
+		document.getElementById("counter").value=value
+	})
+		
+	
+	
+
 }
+
+
+
+
+
 </script>
 
 	{% endblock %}
