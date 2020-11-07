@@ -8,7 +8,11 @@ Type = (
     ("rtp","RTP")
    
 ) 
+def my_default():
+    return {'foo': 'bar','dsds':'sss'}
 
+
+    
 class Server(models.Model):
     server_id=models.AutoField(primary_key=True,unique=True,null=False)
     name=models.CharField(unique = True ,max_length=50)
@@ -23,6 +27,7 @@ class SSW_SIPProfile(models.Model):
     config_id=models.AutoField(primary_key=True,unique=True)
     # config=models.FileField(upload_to='Dashboard/static/config_files/SSW',blank=True)
     name=models.CharField(max_length=20)
+    attrs = models.JSONField(default=my_default)
     def __str__(self):
         return str("config id " + str(self.config_id))
     
