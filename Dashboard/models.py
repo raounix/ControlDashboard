@@ -24,10 +24,10 @@ class Server(models.Model):
         ordering = ['ip',]
 
 class SSW_SIPProfile(models.Model):
-    config_id=models.AutoField(primary_key=True,unique=True)
+    config_id=models.AutoField(primary_key=True,unique=True,null=False)
     # config=models.FileField(upload_to='Dashboard/static/config_files/SSW',blank=True)
-    name=models.CharField(max_length=20)
-    attrs = models.JSONField(default=my_default)
+    Profile_Name=models.CharField(max_length=20)
+    Params = models.JSONField(default=my_default)
     def __str__(self):
         return str("config id " + str(self.config_id))
     

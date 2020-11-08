@@ -82,11 +82,27 @@ def MainDashboardPage(request):
 
 def SIP_Profile_Handler(request,slug):
     if(request.user.is_authenticated ):
+        id_list=set({})
+        sip_profile_id=dict({})
         input_file = open ('config/json/rules.json')
         json_array = json.load(input_file)
         input_file.close()
         ssw_data=Server.objects.filter(Type="ssw")
-        return render(request,"Dashboard_Templates/config_profile.html",{"all":json_array,"ssw_data":ssw_data})
+        server_id=Server.objects.filter(Type="ssw",name=slug).values('server_id')[0]['server_id']
+        SipProfile_ssw=SSW.objects.filter(server_id=server_id).values('SipProfile')
+        
+        for it in SipProfile_ssw:
+                id_list.add(it['SipProfile'])
+        
+        for it in id_list:
+            key=SSW_SIPProfile.objects.filter(pk=it)
+            value=SSW_SIPProfile.objects.filter(pk=it).values('Profile_Name')
+            
+
+            sip_profile_id[it]=value[0]['Profile_Name']
+
+        
+        return render(request,"Dashboard_Templates/config_profile.html",{"all":json_array,"ssw_data":ssw_data,'sip_profile':sip_profile_id})
         
 
     else:

@@ -51,70 +51,79 @@
 		
 
 				
-				<!-- Simple Datatable start -->
-				<div class="pd-20 card-box mb-30">
-					<div class="clearfix">
-						<div class="pull-left">
-							<h4 class="text-blue h4">Form grid</h4>
-							<p class="mb-30">All bootstrap element classies</p>
-						</div>
-			
-					</div>
-					<form >
-						<div class="row">
-							<div class="col-md-4 col-sm-12">
+			<div class="row">
+							<div class="col-md-5 col-sm-12">
 								<div class="form-group">
-									<label>Profile Name</label>
-									<input type="text" class="form-control">
+									<label>Service Name</label>
+									<input type="text" id="service_input" class="form-control">
 								</div>
 							</div>
-							<div class="col-md-4 col-sm-12">
+							<div class="col-md-5 col-sm-12">
+								<label>IP</label>
 								<div class="form-group">
-									<label>  Edit Parameters</label>
-									<button type="button" class= "form-control btn btn-outline-dark" data-toggle="modal" data-target="#configmodal"><i class="dw dw-settings"></i>  Config</button>
+									<input type="text" id="ip_input" class="form-control">
 								</div>
 							</div>
-							<div class="col-md-4 col-sm-12">
+							<div class="col-md-2 col-sm-12">
+							<label id="lab">Confirm</label>
 								<div class="form-group">
-									<label >Submit</label>
-									<button onclick="Submit_Parameters()" type="button" class= "form-control btn btn-outline-dark"  > <i class="dw dw-tick"></i> Submit Changes</button>
+
+									<button type="button" onclick="AddService('{{type}}')" class="btn btn-outline-success  " >Add Service</button>
 								</div>
 							</div>
-						</div>
+							
 						
-					</form>
-					<div class="collapse collapse-box" id="form-grid-form">
-						<div class="code-box">
-							<div class="clearfix">
-								<a href="javascript:;" class="btn btn-primary btn-sm code-copy pull-left" data-clipboard-target="#form-grid"><i class="fa fa-clipboard"></i> Copy Code</a>
-								<a href="#form-grid-form" class="btn btn-primary btn-sm pull-right" rel="content-y" data-toggle="collapse" role="button"><i class="fa fa-eye-slash"></i> Hide Code</a>
-							</div>
-							<pre><code class="xml copy-pre" id="form-grid">
-<form>
-	<div class="row">
-		<div class="col-md-4 col-sm-12">
-			<div class="form-group">
-				<label>col-md-4</label>
-				<input type="text" class="form-control">
+							
+							{% comment %} {% for service in all.service %}
+								{{service.name}}	
+							{% endfor %} {% endcomment %}
+
+							
 			</div>
-		</div>
-		<div class="col-md-4 col-sm-12">
-			<div class="form-group">
-				<label>col-md-4</label>
-				<input type="text" class="form-control">
-			</div>
-		</div>
-		<div class="col-md-4 col-sm-12">
-			<div class="form-group">
-				<label>col-md-4</label>
-				<input type="text" class="form-control">
-			</div>
-		</div>
-	</div>
-	
-</form>
-							</code></pre>
-						</div>
+				
+				<!-- Simple Datatable start -->
+				<div class="card-box mb-30">
+					
+					<div class="pb-20">
+						<table class="data-table table stripe hover nowrap" id="tables">
+							<thead>
+							
+								<tr>
+									<th >Profile Name</th>
+									<th >Edit Parameters</th>
+									<th>Submit</th>
+
+
+								</tr>
+							</thead>
+							<tbody>
+							
+						
+							
+						
+								<tr>
+								{% for key,value in sip_profile.items %}
+									<td class="table-plus"> {{value}} </td>
+									<td> 
+									
+										<button type="button" class="btn" data-bgcolor="#007bb5" data-color="#ffffff" style="color: rgb(255, 255, 255); background-color: rgb(0, 123, 181);">
+											<i class="fa fa-edit"></i>
+										</button>
+
+									 </td>
+									<td>
+										<button type="button" class="btn" data-bgcolor="#00b489" data-color="#ffffff" style="color: rgb(255, 255, 255); background-color: rgb(0, 180, 137);">
+											<i class="fa fa-check"></i>
+											
+										</button>
+									 </td>
+									
+								
+								</tr>
+							{% endfor %}
+							
+							</tbody>
+						</table>
 					</div>
 				</div>
 				<!-- Simple Datatable End -->
@@ -127,9 +136,7 @@
 				<!-- Export Datatable start -->
 				
 				<!-- Export Datatable End -->
-			</div>
-		
-		</div>
+	
 
 		{% endblock %}
 	<!-- js -->
@@ -145,7 +152,7 @@
 	<!-- buttons for Export datatable -->
 
 	<!-- Datatable Setting js -->
-	<script src="{% static 'vendors/scripts/datatable-setting.js' %}"></script>
+	<script src="{% static 'vendors/scripts/datatables-setting.js' %}"></script>
 
 	<!-- add sweet alert js & css in footer -->
 	
