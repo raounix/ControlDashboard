@@ -52,19 +52,19 @@
 
 				
 			<div class="row">
-							<div class="col-md-5 col-sm-12">
+							<div class="col-md-5 col-sm-4">
 								<div class="form-group">
 									<label>Service Name</label>
 									<input type="text" id="service_input" class="form-control">
 								</div>
 							</div>
-							<div class="col-md-5 col-sm-12">
+							<div class="col-md-5 col-sm-4">
 								<label>IP</label>
 								<div class="form-group">
 									<input type="text" id="ip_input" class="form-control">
 								</div>
 							</div>
-							<div class="col-md-2 col-sm-12">
+							<div class="col-md-2 col-sm-4">
 							<label id="lab">Confirm</label>
 								<div class="form-group">
 
@@ -106,15 +106,15 @@
 									<td class="table-plus"> {{value}} </td>
 									<td> 
 									
-										<button type="button" class="btn" data-bgcolor="#007bb5" data-color="#ffffff" style="color: rgb(255, 255, 255); background-color: rgb(0, 123, 181);">
+										<button type="button" class="btn" onclick="ClearModal()" data-toggle="modal" data-target="#configmodal" data-bgcolor="#007bb5" data-color="#ffffff" style="color: rgb(255, 255, 255); background-color: rgb(0, 123, 181);">
 											<i class="fa fa-edit"></i>
 										</button>
 
 									 </td>
 									<td>
-										<button type="button" class="btn" data-bgcolor="#00b489" data-color="#ffffff" style="color: rgb(255, 255, 255); background-color: rgb(0, 180, 137);">
+										<button type="button" class="btn" onclick="Submit_Parameters('{{value}}')"  data-bgcolor="#00b489" data-color="#ffffff" style="color: rgb(255, 255, 255); background-color: rgb(0, 180, 137);">
 											<i class="fa fa-check"></i>
-											
+
 										</button>
 									 </td>
 									
@@ -185,11 +185,11 @@ function AddNewColumn(){
 													</div>
 													<div class="col-md-6 col-sm-12">
 														<div class="form-group">
-															<input type="text" class="form-control" placeholder="Value" name="value_`+value+` ">
+															<input type="text" class="form-control" placeholder="Value" name="value_`+value+`">
 														</div>
 													</div>
 												
-												</div>`
+					</div>`
 		$( "#config_parameters" ).append( html );
 		document.getElementById("counter").value=value
 	})
@@ -199,12 +199,24 @@ function AddNewColumn(){
 
 }
 
-function Submit_Parameters(){
-    document.getElementById("parameters_form").submit(); 
+function Submit_Parameters(value){
+	var html = 	`<input type="hidden"   name="value_id" value="`+value+`">`
+	
+	counter=document.getElementById("counter").value
+	var html_counter = 	`<input type="hidden"   name="count" value="`+counter+`">`
+
+	$( "#config_parameters" ).append( html );
+	$( "#config_parameters" ).append( html_counter );
+
+	document.getElementById("parameters_form").submit(); 
+}
+function b(){
 }
 
-
-
+function ClearModal(){
+	document.getElementById("counter").value=0
+	$( "#config_parameters" ).html( "" );
+}
 </script>
 
 	{% endblock %}

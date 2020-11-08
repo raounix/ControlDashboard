@@ -113,9 +113,25 @@ def SIP_Profile_Handler(request,slug):
 
 ###################################################################################################
 
-def test(request):
-    print(request.POST['name_1'])
-    return HttpResponse("ok")
+def CreateSipProfileXml(request):
+    json_body={'profile_name':'',
+    'params':[ 
+    ]
+    }
+    
+    inject_body={}
+    counter=int(request.POST['count'])
+    json_body['profile_name']=request.POST['value_id']
+    
+    for i in range(counter):
+        inject_body={}
+        inject_body['name']=request.POST["name_"+str(i+1)]
+        inject_body['value']=request.POST["value_"+str(i+1)]
+        
+        json_body['params'].append(inject_body)
+    
+    
+    return HttpResponse(request.POST['count'])
 
 
 def MonitoringServer(request,slug):

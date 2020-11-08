@@ -17,7 +17,7 @@ urlpatterns=[
     path('stop-subservice/',views.stop_subservice),
     path('login/',views.Login),
     path('logout/',views.Logout),
-    path('submit_params/',views.test)
+    path('submit_params/',views.CreateSipProfileXml)
 
 ]
 
