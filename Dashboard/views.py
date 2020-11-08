@@ -130,9 +130,12 @@ def CreateSipProfileXml(request):
         
         json_body['params'].append(inject_body)
     
-    
+    requests.post(url="http://127.0.0.1:5001/profile",json=json_body)
     return HttpResponse(request.POST['count'])
 
+###################################################################################################
+
+###################################################################################################
 
 def MonitoringServer(request,slug):
     if(request.user.is_authenticated ):
