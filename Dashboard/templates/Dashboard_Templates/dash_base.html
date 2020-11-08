@@ -105,7 +105,7 @@
 					</a>
 				</div>
 			</div>
-			<div class="user-notification">
+			{% comment %} <div class="user-notification">
 				<div class="dropdown">
 					<a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
 						<i class="icon-copy dw dw-notification"></i>
@@ -126,7 +126,7 @@
 						</div>
 					</div>
 				</div>
-			</div>
+			</div> {% endcomment %}
 			{% if user.is_authenticated %}
 			<div class="user-info-dropdown">
 				<div class="dropdown">
@@ -137,9 +137,9 @@
 						<span class="user-name">{{user.get_username }}</span>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-						<a class="dropdown-item" href="profile.html"><i class="dw dw-user1"></i> Profile</a>
-						<a class="dropdown-item" href="profile.html"><i class="dw dw-settings2"></i> Setting</a>
-						<a class="dropdown-item" href="faq.html"><i class="dw dw-help"></i> Help</a>
+						<a class="dropdown-item" href="/all-service"><i class="dw dw-user1"></i> Profile</a>
+						{% comment %} <a class="dropdown-item" href="profile.html"><i class="dw dw-settings2"></i> Setting</a>
+						<a class="dropdown-item" href="faq.html"><i class="dw dw-help"></i> Help</a> {% endcomment %}
 						<a  class="dropdown-item" href="/logout/"><i class="dw dw-logout"></i> Log Out</a>
 					</div>
 				</div>
@@ -307,8 +307,7 @@
 	$(document).ready(function(){
 		var pathname=window.location.pathname;
 		if(pathname=="/ssw"){
-			//$('li .sswli').addClass('show');
-			//$('ul .sswUl').css('display','block');
+
 			$( ".sswli" ).trigger( "click" );
 		}
 	});
