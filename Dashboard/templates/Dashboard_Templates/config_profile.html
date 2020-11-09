@@ -54,21 +54,16 @@
 			<div class="row">
 							<div class="col-md-5 col-sm-4">
 								<div class="form-group">
-									<label>Service Name</label>
+									<label>SipProfile Name</label>
 									<input type="text" id="service_input" class="form-control">
 								</div>
 							</div>
-							<div class="col-md-5 col-sm-4">
-								<label>IP</label>
-								<div class="form-group">
-									<input type="text" id="ip_input" class="form-control">
-								</div>
-							</div>
+					
 							<div class="col-md-2 col-sm-4">
 							<label id="lab">Confirm</label>
 								<div class="form-group">
 
-									<button type="button" onclick="AddService('{{type}}')" class="btn btn-outline-success  " >Add Service</button>
+									<button type="button" onclick="AddSipProfile('{{slug}}')" class="btn btn-outline-success  " >Add SipProfile</button>
 								</div>
 							</div>
 							
@@ -162,7 +157,26 @@
 
 <script>
 
+function AddSipProfile(slug){
 
+   var name=$("#service_input").val();
+   
+   if(name ){
+   $.ajax({
+   type: "POST",
+   url: '{{ '/add-sipprofile/' }}',
+   data: { csrfmiddlewaretoken: '{{ csrf_token }}', "slug": slug ,"name":name},
+   success: function callback(result){
+               location.reload();
+				
+
+            }
+});
+
+   }
+ 
+   
+}
 
 function AddNewColumn(){
 	var counter = new Promise((resolve, reject) => {

@@ -79,6 +79,34 @@ def MainDashboardPage(request):
 
 ###################################################################################################
 
+def AddSipProfile(request):
+    if(request.method=="POST"):
+        
+        input_file = open ('config/json/rules.json')
+        json_array = json.load(input_file)
+        input_file.close()
+        ssw_data=Server.objects.filter(Type="ssw")
+
+
+        json_body={'profile_name':'',
+            'params':[ 
+            ]
+            }
+        json_body['profile_name']=request.POST['name']
+        requests.post(url="http://127.0.0.1:5001/profile",json=json_body)
+        print(request.POST['slug'])
+        selected_server=Server.objects.filter(name=request.POST['slug']).get()
+        
+        added_profile=SSW_SIPProfile(Profile_Name=request.POST['name'])
+        added_profile.save()
+        selected_ssw=SSW(server_id=selected_server,SipProfile=added_profile)
+        selected_ssw.save()
+        return render(request,"Dashboard_Templates/config_profile.html",{"all":json_array,"ssw_data":ssw_data})
+        
+    else:
+        return HttpResponse("error")
+    
+
 
 def SIP_Profile_Handler(request,slug):
     if(request.user.is_authenticated ):
@@ -90,20 +118,21 @@ def SIP_Profile_Handler(request,slug):
         ssw_data=Server.objects.filter(Type="ssw")
         server_id=Server.objects.filter(Type="ssw",name=slug).values('server_id')[0]['server_id']
         SipProfile_ssw=SSW.objects.filter(server_id=server_id).values('SipProfile')
-        
-        for it in SipProfile_ssw:
-                id_list.add(it['SipProfile'])
-        
-        for it in id_list:
-            key=SSW_SIPProfile.objects.filter(pk=it)
-            value=SSW_SIPProfile.objects.filter(pk=it).values('Profile_Name')
+        if(request.method=="GET"):
+            for it in SipProfile_ssw:
+                    id_list.add(it['SipProfile'])
             
+            for it in id_list:
+                
+                value=SSW_SIPProfile.objects.filter(pk=it).values('Profile_Name')
+                
+                sip_profile_id[it]=value[0]['Profile_Name']
 
-            sip_profile_id[it]=value[0]['Profile_Name']
-
-        
-        return render(request,"Dashboard_Templates/config_profile.html",{"all":json_array,"ssw_data":ssw_data,'sip_profile':sip_profile_id})
-        
+            
+            return render(request,"Dashboard_Templates/config_profile.html",{"all":json_array,"ssw_data":ssw_data,'sip_profile':sip_profile_id,'slug':slug})
+        else:
+            return HttpResponse("Not Permitted Request Method")
+            
 
     else:
         return redirect('/login/')
@@ -114,24 +143,38 @@ def SIP_Profile_Handler(request,slug):
 ###################################################################################################
 
 def CreateSipProfileXml(request):
-    json_body={'profile_name':'',
-    'params':[ 
-    ]
-    }
-    
-    inject_body={}
-    counter=int(request.POST['count'])
-    json_body['profile_name']=request.POST['value_id']
-    
-    for i in range(counter):
-        inject_body={}
-        inject_body['name']=request.POST["name_"+str(i+1)]
-        inject_body['value']=request.POST["value_"+str(i+1)]
-        
-        json_body['params'].append(inject_body)
-    
-    requests.post(url="http://127.0.0.1:5001/profile",json=json_body)
-    return HttpResponse(request.POST['count'])
+    if(request.method=="POST"):
+        try:
+            
+            input_file = open ('config/json/rules.json')
+            json_array = json.load(input_file)
+            input_file.close()
+            ssw_data=Server.objects.filter(Type="ssw")
+
+
+            json_body={'profile_name':'',
+            'params':[ 
+            ]
+            }
+            
+            inject_body={}
+            counter=int(request.POST['count'])
+            json_body['profile_name']=request.POST['value_id']
+            
+            for i in range(counter):
+                inject_body={}
+                inject_body['name']=request.POST["name_"+str(i+1)]
+                inject_body['value']=request.POST["value_"+str(i+1)]
+                
+                json_body['params'].append(inject_body)
+            
+            requests.post(url="http://127.0.0.1:5001/profile",json=json_body)
+            return render(request,"Dashboard_Templates/config_profile.html",{"all":json_array,"ssw_data":ssw_data})
+        except:
+            return HttpResponse("error")
+
+    else:
+        return HttpResponse("Not Permitted Request Method")
 
 ###################################################################################################
 
