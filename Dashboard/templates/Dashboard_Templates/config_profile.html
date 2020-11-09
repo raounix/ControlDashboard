@@ -1,0 +1,237 @@
+{% extends 'Dashboard_Templates/dash_base.html' %} {% load static %}
+
+
+
+ {% block content %}
+<input type="hidden" id="counter" value="0" />
+
+
+ <div id="config-modal">
+ 	<div class="modal fade" id="configmodal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+								<div class="modal-dialog modal-dialog-centered">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h4 class="modal-title" id="myLargeModalLabel">Upload Config</h4>
+											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+										</div>
+										</br>
+
+										<button onclick="AddNewColumn()" type="button" class="close"  aria-hidden="true">Add New Column</button>
+										</br></br>
+                                          
+										<form id="parameters_form" action="/submit_params/" method="POST">
+                                        {% csrf_token %}
+                                        <div >
+												<div class="pd-20 card-box mb-30">
+													<div class="clearfix">
+													<form >
+												<div id="config_parameters">
+												
+												
+												</div>
+												</form>
+													</div>
+										</div>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+											
+										</div>
+										</form>
+
+									</div>
+								</div>
+	</div>
+
+
+							
+</div>
+
+
+		
+
+				
+			<div class="row">
+							<div class="col-md-5 col-sm-4">
+								<div class="form-group">
+									<label>SipProfile Name</label>
+									<input type="text" id="service_input" class="form-control">
+								</div>
+							</div>
+					
+							<div class="col-md-2 col-sm-4">
+							<label id="lab">Confirm</label>
+								<div class="form-group">
+
+									<button type="button" onclick="AddSipProfile('{{slug}}')" class="btn btn-outline-success  " >Add SipProfile</button>
+								</div>
+							</div>
+							
+						
+							
+							{% comment %} {% for service in all.service %}
+								{{service.name}}	
+							{% endfor %} {% endcomment %}
+
+							
+			</div>
+				
+				<!-- Simple Datatable start -->
+				<div class="card-box mb-30">
+					
+					<div class="pb-20">
+						<table class="data-table table stripe hover nowrap" id="tables">
+							<thead>
+							
+								<tr>
+									<th >Profile Name</th>
+									<th >Edit Parameters</th>
+									<th>Submit</th>
+
+
+								</tr>
+							</thead>
+							<tbody>
+							
+						
+							
+						
+								<tr>
+								{% for key,value in sip_profile.items %}
+									<td class="table-plus"> {{value}} </td>
+									<td> 
+									
+										<button type="button" class="btn" onclick="ClearModal()" data-toggle="modal" data-target="#configmodal" data-bgcolor="#007bb5" data-color="#ffffff" style="color: rgb(255, 255, 255); background-color: rgb(0, 123, 181);">
+											<i class="fa fa-edit"></i>
+										</button>
+
+									 </td>
+									<td>
+										<button type="button" class="btn" onclick="Submit_Parameters('{{value}}')"  data-bgcolor="#00b489" data-color="#ffffff" style="color: rgb(255, 255, 255); background-color: rgb(0, 180, 137);">
+											<i class="fa fa-check"></i>
+
+										</button>
+									 </td>
+									
+								
+								</tr>
+							{% endfor %}
+							
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<!-- Simple Datatable End -->
+				<!-- multiple select row Datatable start -->
+				<div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+  
+					
+					
+				<!-- Checkbox select Datatable End -->
+				<!-- Export Datatable start -->
+				
+				<!-- Export Datatable End -->
+	
+
+		{% endblock %}
+	<!-- js -->
+	{% block scripts %}
+
+	
+	<script src="{% static 'src/plugins/sweetalert2/sweetalert2.all.js' %}"></script>
+	<script src="{% static 'src/plugins/sweetalert2/sweet-alert.init.js' %}"></script>
+
+	<script src="{% static 'src/plugins/datatables/js/jquery.dataTables.min.js' %}"></script>
+	<script src="{% static 'src/plugins/datatables/js/dataTables.bootstrap4.min.js' %}"></script>
+	<script src="{% static 'src/plugins/datatables/js/dataTables.responsive.min.js' %}"></script>
+	<!-- buttons for Export datatable -->
+
+	<!-- Datatable Setting js -->
+	<script src="{% static 'vendors/scripts/datatables-setting.js' %}"></script>
+
+	<!-- add sweet alert js & css in footer -->
+	
+
+
+
+
+<script>
+
+function AddSipProfile(slug){
+
+   var name=$("#service_input").val();
+   
+   if(name ){
+   $.ajax({
+   type: "POST",
+   url: '{{ '/add-sipprofile/' }}',
+   data: { csrfmiddlewaretoken: '{{ csrf_token }}', "slug": slug ,"name":name},
+   success: function callback(result){
+               location.reload();
+				
+
+            }
+});
+
+   }
+ 
+   
+}
+
+function AddNewColumn(){
+	var counter = new Promise((resolve, reject) => {
+		var counter = parseInt(document.getElementById("counter").getAttribute("value"))
+		counter+=1
+		
+		resolve(counter)
+
+	});
+
+	counter.then((value)=>{
+		
+	
+		var html=`<div class="row">
+													<div class="col-md-6 col-sm-12">
+														<div class="form-group">
+															
+															<input type="text" class="form-control" placeholder="Name" name="name_`+value+`">
+														</div>
+													</div>
+													<div class="col-md-6 col-sm-12">
+														<div class="form-group">
+															<input type="text" class="form-control" placeholder="Value" name="value_`+value+`">
+														</div>
+													</div>
+												
+					</div>`
+		$( "#config_parameters" ).append( html );
+		document.getElementById("counter").value=value
+	})
+		
+	
+	
+
+}
+
+function Submit_Parameters(value){
+	var html = 	`<input type="hidden"   name="value_id" value="`+value+`">`
+	
+	counter=document.getElementById("counter").value
+	var html_counter = 	`<input type="hidden"   name="count" value="`+counter+`">`
+
+	$( "#config_parameters" ).append( html );
+	$( "#config_parameters" ).append( html_counter );
+
+	document.getElementById("parameters_form").submit(); 
+}
+function b(){
+}
+
+function ClearModal(){
+	document.getElementById("counter").value=0
+	$( "#config_parameters" ).html( "" );
+}
+</script>
+
+	{% endblock %}
+</html>

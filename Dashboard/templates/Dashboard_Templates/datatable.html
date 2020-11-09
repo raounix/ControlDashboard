@@ -7,6 +7,7 @@
  <input type="hidden" id="hid_name" value="" />
 <input type="hidden" id="hid_ip" value="" />
 <input type="hidden" id="delete_ip" value="" />
+<input type="hidden" id="counter" value="0" />
 
 
  <div id="modals">
@@ -18,17 +19,34 @@
 											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 										</div>
 										</br>
+											<div class="pd-20 card-box mb-30">
+												<div class="clearfix">
+													<form>
+													<div class="row">
+														<div class="col-md-12 col-sm-12">
+															<div class="form-group">
 										<div class="input-group custom">
 													<input id="new_name" type="text" class="form-control form-control-lg" placeholder="Service Name">
 													<div class="input-group-append custom">
 														<span class="input-group-text"><i class="icon-copy dw dw-name"></i></span>
 													</div>
 										</div>
+										</div>
+										</div>
+
+											<div class="col-md-12 col-sm-12">
+															<div class="form-group">
 										<div class="input-group custom">
 													<input id="new_ip" type="text" class="form-control form-control-lg" placeholder="IP">
 													<div class="input-group-append custom">
 														<span class="input-group-text"><i class="icon-copy dw dw-computer"></i></span>
 													</div>
+														</div>
+										
+										</div>
+										</div>
+										</div>
+										</div>
 										</div>
 										<div class="modal-footer">
 											<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -37,12 +55,45 @@
 										
 									</div>
 								</div>
-							</div>
+	</div>
 
 
 							
 </div>
 
+ <div id="config-modal">
+ 	<div class="modal fade" id="configmodal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+								<div class="modal-dialog modal-dialog-centered">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h4 class="modal-title" id="myLargeModalLabel">Upload Config</h4>
+											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+										</div>
+										</br>
+
+										<button onclick="AddNewColumn()" type="button" class="close"  aria-hidden="true">Add New Column</button>
+										</br></br>
+										<form >
+										<div id="test">
+										
+												<div class="row">
+											
+												
+												</div>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+											<button type="button" class="btn btn-primary" onclick="Submit_Edit()">Save changes</button>
+										</div>
+										</form>
+
+									</div>
+								</div>
+	</div>
+
+
+							
+</div>
 
 
 			<div id="delete-modal">
@@ -90,7 +141,7 @@
 
 					</div>
 			</div>
-	
+
 				{% if type != "all" %}
 			<div class="row">
 							<div class="col-md-5 col-sm-12">
@@ -139,6 +190,7 @@
 									<th>Actions</th>
 									<th>Start/Stop</td> 
 									<th>Details</td>
+				
 
 								</tr>
 							</thead>
@@ -182,6 +234,7 @@
 											Details
 									</a>
 									</td>
+								
 								
 								</tr>
 								{% endif %}
@@ -427,7 +480,56 @@ function Service_Status(ip,type){
 }
 
 
+
 //////////////////////////////////////////////////////////////////////////////////////
+
+</script>
+
+<script>
+
+function Counter(value){
+
+}
+
+
+function AddNewColumn(){
+	var counter = new Promise((resolve, reject) => {
+		var counter = parseInt(document.getElementById("counter").getAttribute("value"))
+		counter+=1
+		
+		resolve(counter)
+
+	});
+
+	counter.then((value)=>{
+		
+	
+		var html=`<div class="row">
+													<div class="col-md-6 col-sm-12">
+														<div class="form-group">
+															
+															<input type="text" class="form-control" placeholder="Name" name="name_`+value+` " id="name_`+value+`">
+														</div>
+													</div>
+													<div class="col-md-6 col-sm-12">
+														<div class="form-group">
+															<input type="text" class="form-control" placeholder="Value" name="value_`+value+` " id="value_`+value+`">
+														</div>
+													</div>
+												
+												</div>`
+		$( "#test" ).append( html );
+		document.getElementById("counter").value=value
+	})
+		
+	
+	
+
+}
+
+
+
+
 
 </script>
 

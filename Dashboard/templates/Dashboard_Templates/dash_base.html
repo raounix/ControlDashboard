@@ -105,7 +105,7 @@
 					</a>
 				</div>
 			</div>
-			<div class="user-notification">
+			{% comment %} <div class="user-notification">
 				<div class="dropdown">
 					<a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
 						<i class="icon-copy dw dw-notification"></i>
@@ -126,7 +126,7 @@
 						</div>
 					</div>
 				</div>
-			</div>
+			</div> {% endcomment %}
 			{% if user.is_authenticated %}
 			<div class="user-info-dropdown">
 				<div class="dropdown">
@@ -137,9 +137,9 @@
 						<span class="user-name">{{user.get_username }}</span>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-						<a class="dropdown-item" href="profile.html"><i class="dw dw-user1"></i> Profile</a>
-						<a class="dropdown-item" href="profile.html"><i class="dw dw-settings2"></i> Setting</a>
-						<a class="dropdown-item" href="faq.html"><i class="dw dw-help"></i> Help</a>
+						<a class="dropdown-item" href="/all-service"><i class="dw dw-user1"></i> Profile</a>
+						{% comment %} <a class="dropdown-item" href="profile.html"><i class="dw dw-settings2"></i> Setting</a>
+						<a class="dropdown-item" href="faq.html"><i class="dw dw-help"></i> Help</a> {% endcomment %}
 						<a  class="dropdown-item" href="/logout/"><i class="dw dw-logout"></i> Log Out</a>
 					</div>
 				</div>
@@ -227,27 +227,55 @@
 	<div class="left-side-bar">
 		<div class="brand-logo">
 			<a href="/">
-				<img src="{% static 'vendors/images/deskapp-logo.svg'%}" alt="" class="dark-logo">
-				<img src="{% static 'vendors/images/deskapp-logo-white.svg'%}" alt="" class="light-logo">
+				<img src="{% static 'vendors/images/chd.svg'%}" alt="" class="dark-logo">
+				<img src="{% static 'vendors/images/chd.svg'%}" alt="" class="light-logo">
 			</a>
 			<div class="close-sidebar" data-toggle="left-sidebar-close">
 				<i class="ion-close-round"></i>
 			</div>
 		</div>
+		
 		<div class="menu-block customscroll">
 			<div class="sidebar-menu">
 				<ul id="accordion-menu">
 					<li>
-						<a href="all-service" class="dropdown-toggle no-arrow">
+						<a href="/all-service" class="dropdown-toggle no-arrow">
 							<span class="micon dw dw-board"></span><span class="mtext">Show All Service</span>
 						</a>
 					</li>
 					{% for rules_type in all.rules %}
+					{% if rules_type.name == "ssw" %}
+					
+					<li class="dropdown">
+						<a  class="dropdown-toggle sswli">
+							<span  class="micon dw dw-worldwide"></span> <span class="mtext page_click" data-id="{{ rules_type.name |lower }}">{{rules_type.name|upper}}</span>
+						</a>
+
+						<ul class="submenu sswUl" >
+						
+							{% for submenu in ssw_data %}
+							
+							<li class="dropdown">
+								<a href="javascript:;" class="dropdown-toggle" >
+									<span class="micon fa fa-connectdevelop"></span> <span class="mtext">{{ submenu.name }}</span>
+									
+								</a>
+								<ul class="submenu child" >
+									<li><a href="/{{submenu.name}}/sip" name="{{submenu.name}}/sip">SIP_Profile</a></li>
+								</ul>
+							</li>
+							{% endfor %}
+						</ul>
+					</li>
+
+					{% else %}
 					<li>
-						<a href="{{ rules_type.name |lower }}" class="dropdown-toggle no-arrow">
+						<a href="/{{ rules_type.name |lower }}" class="dropdown-toggle no-arrow">
 							<span class="micon dw dw-worldwide"></span><span class="mtext">{{ rules_type.name|upper }}</span>
 						</a>
 					</li>
+					
+					{% endif %}
 					
 					{% endfor %}
 				
@@ -275,6 +303,18 @@
 	{% block scripts %} {% endblock %}
 	
 	<script src="{% static 'src/plugins/datatables/js/responsive.bootstrap4.min.js'%}"></script>
-	
+	<script>
+	$(document).ready(function(){
+		var pathname=window.location.pathname;
+		if(pathname=="/ssw"){
+
+			$( ".sswli" ).trigger( "click" );
+		}
+	});
+	$('.page_click').click(function(){
+		
+		window.location.href="/ssw";
+		});
+		</script>
 </body>
 </html>

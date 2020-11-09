@@ -9,8 +9,8 @@ from django.core import serializers
 from django.http import HttpResponse,JsonResponse
 from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate, login,logout
-
-from .models import Server,SSWConfig,SBCConfig,RTPConfig,SSW,SBC,RTP
+from django.forms.models import model_to_dict
+from .models import Server,SSW_SIPProfile,SBCConfig,RTPConfig,SSW,SBC,RTP
 
 
 ###################################################################################################
@@ -36,6 +36,11 @@ def Login(request):
         return redirect('/')
         
 
+###################################################################################################
+
+###################################################################################################
+
+
 def Logout(request):
     if(request.user.is_authenticated ):
 
@@ -51,13 +56,84 @@ def Logout(request):
     else:
         return redirect('/')
 
+###################################################################################################
+
+###################################################################################################
+
+
 def MainDashboardPage(request):
     if(request.user.is_authenticated ):
+
         input_file = open ('config/json/rules.json')
         json_array = json.load(input_file)
         input_file.close()
+        ssw_data=Server.objects.filter(Type="ssw")
 
-        return render(request,"Dashboard_Templates/dash_base.html",{"all":json_array})
+        return render(request,"Dashboard_Templates/dash_base.html",{"all":json_array,"ssw_data":ssw_data})
+    else:
+        return redirect('/login/')
+
+
+
+###################################################################################################
+
+###################################################################################################
+
+def AddSipProfile(request):
+    if(request.method=="POST"):
+        
+        input_file = open ('config/json/rules.json')
+        json_array = json.load(input_file)
+        input_file.close()
+        ssw_data=Server.objects.filter(Type="ssw")
+
+
+        json_body={'profile_name':'',
+            'params':[ 
+            ]
+            }
+        json_body['profile_name']=request.POST['name']
+        requests.post(url="http://127.0.0.1:5001/profile",json=json_body)
+        print(request.POST['slug'])
+        selected_server=Server.objects.filter(name=request.POST['slug']).get()
+        
+        added_profile=SSW_SIPProfile(Profile_Name=request.POST['name'])
+        added_profile.save()
+        selected_ssw=SSW(server_id=selected_server,SipProfile=added_profile)
+        selected_ssw.save()
+        return render(request,"Dashboard_Templates/config_profile.html",{"all":json_array,"ssw_data":ssw_data})
+        
+    else:
+        return HttpResponse("error")
+    
+
+
+def SIP_Profile_Handler(request,slug):
+    if(request.user.is_authenticated ):
+        id_list=set({})
+        sip_profile_id=dict({})
+        input_file = open ('config/json/rules.json')
+        json_array = json.load(input_file)
+        input_file.close()
+        ssw_data=Server.objects.filter(Type="ssw")
+        server_id=Server.objects.filter(Type="ssw",name=slug).values('server_id')[0]['server_id']
+        SipProfile_ssw=SSW.objects.filter(server_id=server_id).values('SipProfile')
+        if(request.method=="GET"):
+            for it in SipProfile_ssw:
+                    id_list.add(it['SipProfile'])
+            
+            for it in id_list:
+                
+                value=SSW_SIPProfile.objects.filter(pk=it).values('Profile_Name')
+                
+                sip_profile_id[it]=value[0]['Profile_Name']
+
+            
+            return render(request,"Dashboard_Templates/config_profile.html",{"all":json_array,"ssw_data":ssw_data,'sip_profile':sip_profile_id,'slug':slug})
+        else:
+            return HttpResponse("Not Permitted Request Method")
+            
+
     else:
         return redirect('/login/')
 
@@ -66,8 +142,43 @@ def MainDashboardPage(request):
 
 ###################################################################################################
 
+def CreateSipProfileXml(request):
+    if(request.method=="POST"):
+        try:
+            
+            input_file = open ('config/json/rules.json')
+            json_array = json.load(input_file)
+            input_file.close()
+            ssw_data=Server.objects.filter(Type="ssw")
 
 
+            json_body={'profile_name':'',
+            'params':[ 
+            ]
+            }
+            
+            inject_body={}
+            counter=int(request.POST['count'])
+            json_body['profile_name']=request.POST['value_id']
+            
+            for i in range(counter):
+                inject_body={}
+                inject_body['name']=request.POST["name_"+str(i+1)]
+                inject_body['value']=request.POST["value_"+str(i+1)]
+                
+                json_body['params'].append(inject_body)
+            
+            requests.post(url="http://127.0.0.1:5001/profile",json=json_body)
+            return render(request,"Dashboard_Templates/config_profile.html",{"all":json_array,"ssw_data":ssw_data})
+        except:
+            return HttpResponse("error")
+
+    else:
+        return HttpResponse("Not Permitted Request Method")
+
+###################################################################################################
+
+###################################################################################################
 
 def MonitoringServer(request,slug):
     if(request.user.is_authenticated ):
@@ -77,6 +188,7 @@ def MonitoringServer(request,slug):
                 input_file = open ('config/json/rules.json')
                 json_array = json.load(input_file)
                 input_file.close()
+                ssw_data=Server.objects.filter(Type="ssw")
                 status={}
                 try:
                     for server in main:
@@ -85,9 +197,9 @@ def MonitoringServer(request,slug):
                         status[server.name]=r.text
             
                 
-                    return render(request,"Dashboard_Templates/datatable.html",{"alldata":main,"type":"all","all":json_array,'status':status})
+                    return render(request,"Dashboard_Templates/datatable.html",{"alldata":main,"type":"all","all":json_array,'status':status,"ssw_data":ssw_data})
                 except:
-                    return render(request,"Dashboard_Templates/datatable.html",{"alldata":'',"type":"all","all":json_array,'status':''})
+                    return render(request,"Dashboard_Templates/datatable.html",{"alldata":'',"type":"all","all":json_array,'status':'',"ssw_data":ssw_data})
 
 
             elif(slug=="ssw"):
@@ -96,16 +208,16 @@ def MonitoringServer(request,slug):
                 input_file = open ('config/json/rules.json')
                 json_array = json.load(input_file)
                 input_file.close()
-      
+                ssw_data=Server.objects.filter(Type="ssw")
                 try:
                     for server in main:
                         data={'name':server.server_id,'type':server.Type}
                         r=requests.post(url="http://"+server.ip+":5000/check-status",json=data)
                         status[server.name]=r.text
         
-                    return render(request,"Dashboard_Templates/datatable.html",{"alldata":main,"type":"ssw","all":json_array,'status':status})
+                    return render(request,"Dashboard_Templates/datatable.html",{"alldata":main,"type":"ssw","all":json_array,'status':status,"ssw_data":ssw_data})
                 except:
-                    return render(request,"Dashboard_Templates/datatable.html",{"alldata":'',"type":"ssw","all":json_array,'status':''})
+                    return render(request,"Dashboard_Templates/datatable.html",{"alldata":'',"type":"ssw","all":json_array,'status':'',"ssw_data":ssw_data})
             
 
             elif(slug=="sbc"):
@@ -114,6 +226,7 @@ def MonitoringServer(request,slug):
                 input_file = open ('config/json/rules.json')
                 json_array = json.load(input_file)
                 input_file.close()
+                ssw_data=Server.objects.filter(Type="ssw")
 
 
                 try:
@@ -121,9 +234,9 @@ def MonitoringServer(request,slug):
                         data={'name':server.server_id,'type':server.Type}
                         r=requests.post(url="http://"+server.ip+":5000/check-status",json=data)
                         status[server.name]=r.text
-                    return render(request,"Dashboard_Templates/datatable.html",{"alldata":main,"type":"sbc","all":json_array,'status':status})
+                    return render(request,"Dashboard_Templates/datatable.html",{"alldata":main,"type":"sbc","all":json_array,'status':status,"ssw_data":ssw_data})
                 except:
-                    return render(request,"Dashboard_Templates/datatable.html",{"alldata":'',"type":"sbc","all":json_array,'status':''})
+                    return render(request,"Dashboard_Templates/datatable.html",{"alldata":'',"type":"sbc","all":json_array,'status':'',"ssw_data":ssw_data})
                 
 
             elif(slug=="rtp"):
@@ -132,6 +245,7 @@ def MonitoringServer(request,slug):
                 input_file = open ('config/json/rules.json')
                 json_array = json.load(input_file)
                 input_file.close()
+                ssw_data=Server.objects.filter(Type="ssw")
 
 
                 try:
@@ -139,9 +253,9 @@ def MonitoringServer(request,slug):
                         data={'name':server.server_id,'type':server.Type}
                         r=requests.post(url="http://"+server.ip+":5000/check-status",json=data)
                         status[server.name]=r.text
-                    return render(request,"Dashboard_Templates/datatable.html",{"alldata":main,"type":"rtp","all":json_array,'status':status})
+                    return render(request,"Dashboard_Templates/datatable.html",{"alldata":main,"type":"rtp","all":json_array,'status':status,"ssw_data":ssw_data})
                 except:
-                    return render(request,"Dashboard_Templates/datatable.html",{"alldata":'',"type":"rtp","all":json_array,'status':''})
+                    return render(request,"Dashboard_Templates/datatable.html",{"alldata":'',"type":"rtp","all":json_array,'status':'',"ssw_data":ssw_data})
 
             
             else:
